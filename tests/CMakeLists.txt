@@ -13,6 +13,7 @@ zpew_configure_third_party_target(Catch2WithMain)
 add_executable(zpew_tests
     data/gap_test.cpp
     data/iso_date_test.cpp
+    data/manifest_test.cpp
     data/snapshot_csv_test.cpp
     data/trading_calendar_test.cpp
     data/validation_test.cpp
@@ -21,7 +22,7 @@ add_executable(zpew_tests
     io/sha256_test.cpp
     version_test.cpp)
 
-target_link_libraries(zpew_tests PRIVATE zpew::core Catch2::Catch2WithMain)
+target_link_libraries(zpew_tests PRIVATE zpew::core Catch2::Catch2WithMain nlohmann_json::nlohmann_json)
 target_include_directories(zpew_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(zpew_tests PRIVATE ZPEW_EXPECTED_VERSION="${PROJECT_VERSION}")
 
@@ -38,4 +39,5 @@ if(ZPEW_BUILD_CLI)
 
     add_test(NAME cli.rejects_unknown_arguments COMMAND zpew_cli --bogus)
     set_tests_properties(cli.rejects_unknown_arguments PROPERTIES WILL_FAIL TRUE)
+
 endif()
