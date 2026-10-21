@@ -1,4 +1,6 @@
 add_library(zpew_core STATIC
+    src/io/binary_file.cpp
+    src/io/sha256.cpp
     src/version.cpp)
 add_library(zpew::core ALIAS zpew_core)
 
