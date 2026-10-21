@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {
+      "symbol": "SIM",
+      "name": "Simulated GARCH test asset",
+      "asset_class": "test",
+      "calendar": "weekdays",
+      "source": "hand-made",
+      "source_url": "https://example.invalid/sim",
+      "terms_url": "https://example.invalid/terms",
+      "fetched_at": "2026-10-21T00:00:00Z",
+      "first_date": "2020-01-01",
+      "last_date": "2020-08-11",
+      "rows": 160,
+      "file": "snapshots/SIM.csv",
+      "sha256": "4431f330cee37de5eaad25504bf3a0e5a5cbb51b6c36dd995fc622b7dcd4baf3"
+    }
+  ]
+}

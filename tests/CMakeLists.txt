@@ -103,6 +103,31 @@ if(ZPEW_BUILD_CLI)
     set_tests_properties(cli.fit_rejects_bad_targeting_values PROPERTIES
         PASS_REGULAR_EXPRESSION "--targeting expects on or off")
 
+    set(zpew_eval_output ${CMAKE_CURRENT_BINARY_DIR}/cli-eval-output)
+
+    add_test(NAME cli.eval_runs_the_fixture_and_reports_unfittable_models
+        COMMAND zpew_cli eval --config ${zpew_cli_fixtures}/eval/eval.toml --output ${zpew_eval_output})
+    set_tests_properties(cli.eval_runs_the_fixture_and_reports_unfittable_models PROPERTIES
+        PASS_REGULAR_EXPRESSION "evaluated 1 assets x 2 window modes in [0-9.]+ s; 2 failures")
+
+    add_test(NAME cli.eval_writes_every_output_file
+        COMMAND ${CMAKE_COMMAND} -E cat
+                ${zpew_eval_output}/fixture/run.json
+                ${zpew_eval_output}/fixture/losses.csv
+                ${zpew_eval_output}/fixture/improvements.csv
+                ${zpew_eval_output}/fixture/pooled.csv
+                ${zpew_eval_output}/fixture/failures.csv
+                ${zpew_eval_output}/fixture/forecasts/sliding/SIM.csv
+                ${zpew_eval_output}/fixture/forecasts/expanding/SIM.csv)
+    set_tests_properties(cli.eval_writes_every_output_file PROPERTIES
+        DEPENDS cli.eval_runs_the_fixture_and_reports_unfittable_models
+        PASS_REGULAR_EXPRESSION "\"git_commit\".*SIM,sliding,garch,needs a window of at least 500 returns")
+
+    add_test(NAME cli.eval_rejects_unknown_config_keys
+        COMMAND zpew_cli eval --config ${zpew_cli_fixtures}/eval/unknown_key.toml --output ${zpew_eval_output})
+    set_tests_properties(cli.eval_rejects_unknown_config_keys PROPERTIES
+        PASS_REGULAR_EXPRESSION "unknown key 'threds' in the top level")
+
     add_test(NAME cli.check_data_fails_on_missing_manifest
         COMMAND zpew_cli check-data --manifest ${zpew_cli_fixtures}/missing/manifest.json)
     set_tests_properties(cli.check_data_fails_on_missing_manifest PROPERTIES WILL_FAIL TRUE)

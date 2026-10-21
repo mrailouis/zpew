@@ -6,6 +6,6 @@
 
 namespace zpew::cli {
 
-[[nodiscard]] int run_fit(const Options& options, std::ostream& out);
+[[nodiscard]] int run_fit(const Options& options, std::ostream& out, std::ostream& err);
 
 }

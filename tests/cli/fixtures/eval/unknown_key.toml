@@ -1,0 +1,28 @@
+name = "fixture"
+manifest = "manifest.json"
+output = "unused-output"
+assets = []
+threads = 2
+threds = 3
+baseline = "rv21"
+
+[evaluation]
+window = 60
+refit_every = 20
+window_modes = ["sliding", "expanding"]
+
+[[models]]
+name = "rv21"
+type = "realised"
+window = 21
+
+[[models]]
+name = "ewma"
+type = "ewma"
+lambda = 0.94
+seed_window = 21
+
+[[models]]
+name = "garch"
+type = "garch"
+variance_targeting = false

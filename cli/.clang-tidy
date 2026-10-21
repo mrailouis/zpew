@@ -1,0 +1,5 @@
+---
+InheritParentConfig: true
+CheckOptions:
+  - { key: misc-include-cleaner.IgnoreHeaders, value: 'toml\+\+/.*' }
+...

@@ -1,0 +1,44 @@
+# Default out-of-sample evaluation, run with:
+#   zpew-cli eval --config configs/default.toml
+# Relative paths are resolved from this file's directory.
+
+name = "default"
+manifest = "../data/manifest.json"
+output = "../results"
+
+# An empty list evaluates every asset in the manifest.
+assets = []
+
+# 0 uses one fewer thread than the machine has cores.
+threads = 0
+
+# Improvements are reported relative to this model.
+baseline = "rv21"
+
+[evaluation]
+# Estimation window W in returns and refit interval k in days (SPEC.md section 7).
+window = 1000
+refit_every = 20
+# Sliding is the primary design; expanding is the robustness check.
+window_modes = ["sliding", "expanding"]
+
+[[models]]
+name = "rv21"
+type = "realised"
+window = 21
+
+[[models]]
+name = "rv63"
+type = "realised"
+window = 63
+
+[[models]]
+name = "ewma"
+type = "ewma"
+lambda = 0.94
+seed_window = 21
+
+[[models]]
+name = "garch"
+type = "garch"
+variance_targeting = false
