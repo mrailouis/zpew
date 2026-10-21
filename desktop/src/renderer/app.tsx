@@ -10,14 +10,17 @@ import {
     type ChartData,
     type ChartSettings,
 } from "../shared/api";
+import { useAppearance, usePreferences } from "./appearance/use-appearance";
 import { buildChartModel } from "./chart/chart-model";
-import { ChartView } from "./chart/chart-view";
-import { formatCommit } from "./format";
-import { ComparisonTable } from "./panels/comparison-table";
-import { SettingsPanel } from "./panels/settings-panel";
-import { SymbolPicker } from "./panels/symbol-picker";
-
-type Tab = "chart" | "comparison";
+import type { RangeRequest } from "./chart/chart-view";
+import { Inspector } from "./panels/inspector";
+import { Sidebar } from "./panels/sidebar";
+import { TopBar } from "./shell/top-bar";
+import type { View } from "./shell/views";
+import { ChartWorkspace } from "./views/chart-workspace";
+import { DataView } from "./views/data-view";
+import { ModelsView } from "./views/models-view";
+import { SettingsView } from "./views/settings-view";
 
 const ANALYSIS_DEBOUNCE_MS = 300;
 
@@ -28,27 +31,30 @@ function errorMessage(error: unknown): string {
 }
 
 export function App() {
+    const [preferences, updatePreferences] = usePreferences();
+    const theme = useAppearance(preferences);
     const [info, setInfo] = useState<AppInfo | null>(null);
     const [assets, setAssets] = useState<readonly AssetSummary[]>([]);
     const [startupError, setStartupError] = useState<string | null>(null);
     const [selected, setSelected] = useState<string | null>(null);
+    const [view, setView] = useState<View>("chart");
+    const [range, setRange] = useState<RangeRequest>({ preset: "1Y", serial: 0 });
     const [chartSettings, setChartSettings] = useState<ChartSettings>(DEFAULT_CHART_SETTINGS);
     const [analysisSettings, setAnalysisSettings] =
         useState<AnalysisSettings>(DEFAULT_ANALYSIS_SETTINGS);
-    const [logPrice, setLogPrice] = useState(false);
     const [varModel, setVarModel] = useState<string | null>("garch");
     const [chart, setChart] = useState<ChartData | null>(null);
     const [chartError, setChartError] = useState<string | null>(null);
     const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
     const [analysisError, setAnalysisError] = useState<string | null>(null);
     const [analysing, setAnalysing] = useState(false);
-    const [tab, setTab] = useState<Tab>("chart");
     const chartRequest = useRef(0);
     const analysisRequest = useRef(0);
 
     useEffect(() => {
         Promise.all([window.zpew.appInfo(), window.zpew.listAssets()])
             .then(([appInfo, list]) => {
+                document.documentElement.dataset.platform = appInfo.platform;
                 setInfo(appInfo);
                 setAssets(list);
                 setSelected(list[0]?.symbol ?? null);
@@ -127,79 +133,100 @@ export function App() {
         [chart, currentAnalysis, chartSettings, bandModel],
     );
     const asset = assets.find((a) => a.symbol === selected);
+    const inspectorOpen = preferences.showInspector && view !== "settings";
 
     const status = analysing
         ? currentAnalysis === null
-            ? "evaluating forecasts…"
-            : "updating forecasts…"
+            ? "Evaluating forecasts…"
+            : "Updating forecasts…"
         : analysisError !== null
-          ? `forecast evaluation unavailable: ${analysisError}`
+          ? `Forecast evaluation unavailable: ${analysisError}`
           : null;
 
     return (
-        <div className="app">
-            <aside className="sidebar">
-                <div className="brand">
-                    zpew{" "}
-                    <span className="muted">
-                        {info ? `${info.version} · ${formatCommit(info.commit, info.dirty)}` : ""}
-                    </span>
-                </div>
-                <SettingsPanel
-                    chart={chartSettings}
-                    analysis={analysisSettings}
-                    logPrice={logPrice}
-                    varModel={bandModel}
-                    modelNames={modelNames}
-                    onChartChange={setChartSettings}
-                    onAnalysisChange={setAnalysisSettings}
-                    onLogPriceChange={setLogPrice}
-                    onVarModelChange={setVarModel}
+        <div
+            className={[
+                "shell",
+                preferences.showWatchlist ? "" : "sidebar-closed",
+                inspectorOpen ? "" : "inspector-closed",
+            ].join(" ")}
+        >
+            <Sidebar
+                open={preferences.showWatchlist}
+                assets={assets}
+                selected={selected}
+                settingsOpen={view === "settings"}
+                preferences={preferences}
+                onPreferences={updatePreferences}
+                onSelect={(symbol) => {
+                    setSelected(symbol);
+                    setRange((current) => ({ ...current, serial: current.serial + 1 }));
+                    if (view === "settings") {
+                        setView("chart");
+                    }
+                }}
+                onSettings={() => {
+                    setView("settings");
+                }}
+            />
+            <div className="main">
+                <TopBar
+                    view={view}
+                    showSidebar={preferences.showWatchlist}
+                    showInspector={inspectorOpen}
+                    onView={setView}
+                    onToggleSidebar={() => {
+                        updatePreferences({ showWatchlist: true });
+                    }}
+                    onToggleInspector={() => {
+                        updatePreferences({ showInspector: true });
+                        if (view === "settings") {
+                            setView("chart");
+                        }
+                    }}
                 />
-                <SymbolPicker assets={assets} selected={selected} onSelect={setSelected} />
-            </aside>
-            <main className="main">
-                {startupError !== null && <div className="error">{startupError}</div>}
-                {asset && (
-                    <header className="header">
-                        <span className="symbol">{asset.symbol}</span>
-                        <span>{asset.name}</span>
-                        {status !== null && (
-                            <span className={analysisError ? "error" : "muted"}>{status}</span>
-                        )}
-                    </header>
-                )}
-                <nav className="tabs">
-                    <button
-                        type="button"
-                        className={tab === "chart" ? "active" : ""}
-                        onClick={() => {
-                            setTab("chart");
-                        }}
-                    >
-                        chart
-                    </button>
-                    <button
-                        type="button"
-                        className={tab === "comparison" ? "active" : ""}
-                        onClick={() => {
-                            setTab("comparison");
-                        }}
-                    >
-                        model comparison
-                    </button>
-                </nav>
-                {chartError !== null && <div className="error">{chartError}</div>}
-                {tab === "chart" && model !== null && (
-                    <ChartView model={model} logPrice={logPrice} />
-                )}
-                {tab === "comparison" &&
-                    (currentAnalysis !== null ? (
-                        <ComparisonTable analysis={currentAnalysis} />
-                    ) : (
-                        <p className="muted">{status ?? "no forecast evaluation yet"}</p>
-                    ))}
-            </main>
+                <main className="content">
+                    {startupError !== null && <p className="note error page">{startupError}</p>}
+                    {view === "chart" && (
+                        <ChartWorkspace
+                            asset={asset}
+                            model={model}
+                            theme={theme}
+                            preferences={preferences}
+                            range={range}
+                            error={chartError}
+                            onRange={(preset) => {
+                                setRange((current) => ({ preset, serial: current.serial + 1 }));
+                            }}
+                            onPreferences={updatePreferences}
+                        />
+                    )}
+                    {view === "models" && <ModelsView analysis={currentAnalysis} status={status} />}
+                    {view === "data" && <DataView asset={asset} chart={chart} theme={theme} />}
+                    {view === "settings" && (
+                        <SettingsView
+                            info={info}
+                            preferences={preferences}
+                            chart={chartSettings}
+                            onPreferences={updatePreferences}
+                            onChart={setChartSettings}
+                        />
+                    )}
+                </main>
+            </div>
+            <Inspector
+                open={inspectorOpen}
+                settings={analysisSettings}
+                analysis={currentAnalysis}
+                status={status}
+                error={analysisError !== null}
+                varModel={bandModel}
+                onChange={setAnalysisSettings}
+                onVarModelChange={setVarModel}
+                onHide={() => {
+                    updatePreferences({ showInspector: false });
+                }}
+            />
         </div>
     );
 }
