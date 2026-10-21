@@ -11,8 +11,11 @@ zpew_configure_third_party_target(Catch2)
 zpew_configure_third_party_target(Catch2WithMain)
 
 add_executable(zpew_tests
+    data/gap_test.cpp
     data/iso_date_test.cpp
     data/snapshot_csv_test.cpp
+    data/trading_calendar_test.cpp
+    data/validation_test.cpp
     error_test.cpp
     io/binary_file_test.cpp
     io/sha256_test.cpp
