@@ -11,6 +11,7 @@ zpew_configure_third_party_target(Catch2)
 zpew_configure_third_party_target(Catch2WithMain)
 
 add_executable(zpew_tests
+    error_test.cpp
     version_test.cpp)
 
 target_link_libraries(zpew_tests PRIVATE zpew::core Catch2::Catch2WithMain)
