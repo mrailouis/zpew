@@ -3,7 +3,7 @@ export function formatPrice(value: number): string {
         return "–";
     }
     const magnitude = Math.abs(value);
-    const decimals = magnitude >= 1000 ? 2 : magnitude >= 1 ? 2 : magnitude >= 0.01 ? 4 : 6;
+    const decimals = magnitude === 0 || magnitude >= 1 ? 2 : magnitude >= 0.01 ? 4 : 6;
     return value.toLocaleString("en-GB", {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,

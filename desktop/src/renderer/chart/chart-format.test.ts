@@ -9,6 +9,7 @@ describe("chart formatting", () => {
         expect(formatPrice(0.123456)).toBe("0.1235");
         expect(formatPrice(0.00123456)).toBe("0.001235");
         expect(formatPrice(Number.NaN)).toBe("–");
+        expect(formatPrice(0)).toBe("0.00");
     });
 
     it("abbreviates large volumes", () => {
