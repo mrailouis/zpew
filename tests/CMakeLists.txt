@@ -34,6 +34,7 @@ add_executable(zpew_tests
     returns/moving_average_test.cpp
     returns/realised_variance_test.cpp
     returns/rolling_mean_test.cpp
+    var/backtest_test.cpp
     var/normal_quantile_test.cpp
     version_test.cpp)
 
