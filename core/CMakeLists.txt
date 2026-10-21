@@ -11,6 +11,7 @@ add_library(zpew_core STATIC
     src/io/binary_file.cpp
     src/io/sha256.cpp
     src/models/ewma_model.cpp
+    src/models/garch_model.cpp
     src/models/garch_params.cpp
     src/models/realised_vol_model.cpp
     src/optimiser/nelder_mead.cpp
