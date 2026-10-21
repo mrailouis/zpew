@@ -1,6 +1,7 @@
 #include "check_data_command.hpp"
 #include "exit_code.hpp"
 
+#include <zpew/data/manifest.hpp>
 #include <zpew/error.hpp>
 #include <zpew/version.hpp>
 
@@ -8,6 +9,7 @@
 #include <exception>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <span>
 #include <string_view>
 #include <vector>
@@ -16,7 +18,6 @@ namespace {
 
 constexpr std::string_view kUsage = "usage: zpew-cli --version\n"
                                     "       zpew-cli check-data [--manifest <path>]\n";
-constexpr std::string_view kDefaultManifest = "data/manifest.json";
 
 int usage_error() {
     std::cerr << kUsage;
@@ -24,13 +25,19 @@ int usage_error() {
 }
 
 int check_data(std::span<const std::string_view> options) {
-    std::filesystem::path manifest{kDefaultManifest};
+    std::optional<std::filesystem::path> manifest;
     if (options.size() == 2 && options.front() == "--manifest") {
         manifest = std::filesystem::path{options.back()};
-    } else if (!options.empty()) {
+    } else if (options.empty()) {
+        manifest = zpew::data::find_manifest(std::filesystem::current_path());
+    } else {
         return usage_error();
     }
-    return zpew::cli::run_check_data(manifest, std::cout, std::cerr);
+    if (!manifest) {
+        std::cerr << "zpew-cli: no data/manifest.json found in this directory or its parents\n";
+        return zpew::cli::kExitDataError;
+    }
+    return zpew::cli::run_check_data(*manifest, std::cout, std::cerr);
 }
 
 int run(std::span<const std::string_view> args) {
