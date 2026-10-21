@@ -60,16 +60,16 @@ describe("buildChartModel", () => {
     it("shows only moving averages and realised volatility without an analysis", () => {
         const result = buildChartModel(chart, null, options);
         expect(result.priceLines.map((l) => l.label)).toEqual(["SMA 50", "SMA 200"]);
-        expect(result.volatilityLines.map((l) => l.label)).toEqual(["21-day realised"]);
+        expect(result.volatilityLines.map((l) => l.label)).toEqual(["21d realised"]);
         expect(result.breaches).toBeNull();
     });
 
     it("aligns forecasts to bars and skips models that failed", () => {
         const result = buildChartModel(chart, analysis, options);
-        expect(result.volatilityLines.map((l) => l.label)).toEqual([
-            "21-day realised",
-            "forecast rv21",
-            "forecast ewma",
+        expect(result.volatilityLines.map((l) => [l.label, l.role, l.order])).toEqual([
+            ["21d realised", "realised", 0],
+            ["RV21", "forecast", 0],
+            ["EWMA", "forecast", 1],
         ]);
         const ewma = result.volatilityLines[2]?.values ?? new Float64Array();
         expect(Array.from(ewma.slice(0, 3)).every(Number.isNaN)).toBe(true);
@@ -79,10 +79,11 @@ describe("buildChartModel", () => {
     it("draws the chosen model's VaR band and marks its breaches on their bars", () => {
         const result = buildChartModel(chart, analysis, options);
         const band = result.priceLines[2];
-        expect(band?.label).toBe("95% VaR (ewma)");
+        expect(band?.label).toBe("VaR 95% EWMA");
+        expect(band?.role).toBe("var");
         expect(band?.dashed).toBe(true);
         expect(Array.from(band?.values.slice(3) ?? [])).toEqual([3.1, 4.1]);
-        expect(result.breaches).toEqual({ label: "breaches (1)", indices: [4], prices: [5.5] });
+        expect(result.breaches).toEqual({ label: "1 breaches", indices: [4], prices: [5.5] });
     });
 
     it("ignores an analysis that belongs to a different symbol", () => {

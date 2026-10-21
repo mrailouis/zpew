@@ -6,3 +6,7 @@ export function formatCommit(commit: string, dirty: boolean): string {
 export function formatCount(value: number, noun: string): string {
     return `${value.toLocaleString("en-GB")} ${value === 1 ? noun : `${noun}s`}`;
 }
+
+export function modelLabel(name: string): string {
+    return name.toUpperCase();
+}

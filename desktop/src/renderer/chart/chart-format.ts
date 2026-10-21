@@ -35,3 +35,17 @@ export function formatPercent(value: number, decimals = 2): string {
 export function formatIsoDate(secondsSinceEpoch: number): string {
     return new Date(secondsSinceEpoch * 1000).toISOString().slice(0, 10);
 }
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export function formatLongDate(secondsSinceEpoch: number): string {
+    const date = new Date(secondsSinceEpoch * 1000);
+    return `${String(date.getUTCDate())} ${MONTHS[date.getUTCMonth()] ?? ""} ${String(date.getUTCFullYear())}`;
+}
+
+export function formatChange(value: number): string {
+    if (!Number.isFinite(value)) {
+        return "–";
+    }
+    return `${value >= 0 ? "+" : "−"}${Math.abs(value * 100).toFixed(2)}%`;
+}

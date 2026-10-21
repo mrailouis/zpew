@@ -1,26 +1,41 @@
 import { useCallback, useEffect, useRef } from "react";
 
+import type { ChartTheme } from "../appearance/chart-theme";
+import type { ChartStyle } from "../appearance/preferences";
 import type { ChartModel } from "./chart-model";
 import { renderChart, type Crosshair } from "./chart-renderer";
-import { computeLayout } from "./layout";
+import { computeLayout, type PaneVisibility } from "./layout";
+import { viewportForRange, type RangePreset } from "./range";
 import { fitViewport, panViewport, zoomViewport, type Viewport } from "./viewport";
+
+export interface RangeRequest {
+    readonly preset: RangePreset;
+    readonly serial: number;
+}
 
 interface ChartViewProps {
     readonly model: ChartModel;
+    readonly theme: ChartTheme;
+    readonly style: ChartStyle;
     readonly logPrice: boolean;
+    readonly panes: PaneVisibility;
+    readonly watermark: boolean;
+    readonly range: RangeRequest;
 }
 
 const WHEEL_ZOOM_SPEED = 0.0025;
 const KEY_ZOOM_FACTOR = 1.25;
 const KEY_PAN_FRACTION = 0.1;
 
-export function ChartView({ model, logPrice }: ChartViewProps) {
+export function ChartView(props: ChartViewProps) {
+    const { model, range } = props;
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const viewportRef = useRef<Viewport>(fitViewport(model.times.length));
+    const viewportRef = useRef<Viewport>(viewportForRange(model.times, range.preset));
     const crosshairRef = useRef<Crosshair | null>(null);
     const dragRef = useRef<{ x: number; viewport: Viewport } | null>(null);
     const frameRef = useRef<number | null>(null);
-    const stateRef = useRef({ model, logPrice });
+    const stateRef = useRef(props);
+    const rangeRef = useRef(range.serial);
     const symbolRef = useRef(model.symbol);
 
     const draw = useCallback(() => {
@@ -41,9 +56,14 @@ export function ChartView({ model, logPrice }: ChartViewProps) {
             canvas.height = Math.round(height * ratio);
         }
         context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        const current = stateRef.current;
         renderChart(context, width, height, {
-            model: stateRef.current.model,
-            logPrice: stateRef.current.logPrice,
+            model: current.model,
+            theme: current.theme,
+            style: current.style,
+            logPrice: current.logPrice,
+            panes: current.panes,
+            watermark: current.watermark,
             viewport: viewportRef.current,
             crosshair: crosshairRef.current,
         });
@@ -54,13 +74,14 @@ export function ChartView({ model, logPrice }: ChartViewProps) {
     }, [draw]);
 
     useEffect(() => {
-        if (symbolRef.current !== model.symbol) {
+        if (symbolRef.current !== model.symbol || rangeRef.current !== range.serial) {
             symbolRef.current = model.symbol;
-            viewportRef.current = fitViewport(model.times.length);
+            rangeRef.current = range.serial;
+            viewportRef.current = viewportForRange(model.times, range.preset);
         }
-        stateRef.current = { model, logPrice };
+        stateRef.current = props;
         requestDraw();
-    }, [model, logPrice, requestDraw]);
+    }, [props, model, range, requestDraw]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -80,7 +101,8 @@ export function ChartView({ model, logPrice }: ChartViewProps) {
         };
     }, [requestDraw]);
 
-    const plotWidth = () => computeLayout(canvasRef.current?.clientWidth ?? 0, 0).plotWidth;
+    const plotWidth = () =>
+        computeLayout(canvasRef.current?.clientWidth ?? 0, 0, stateRef.current.panes).plotWidth;
     const barCount = () => stateRef.current.model.times.length;
 
     const setViewport = (viewport: Viewport) => {

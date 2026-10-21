@@ -1,10 +1,13 @@
 import type { AnalysisData, ChartData } from "../../shared/api";
+import { modelLabel } from "../format";
 import { alignToBars, lowerBound } from "./series-index";
-import { LINE_COLOURS, THEME } from "./theme";
+
+export type LineRole = "fast" | "slow" | "var" | "realised" | "forecast";
 
 export interface OverlayLine {
     readonly label: string;
-    readonly colour: string;
+    readonly role: LineRole;
+    readonly order: number;
     readonly values: Float64Array;
     readonly dashed: boolean;
 }
@@ -61,21 +64,24 @@ export function buildChartModel(
     const priceLines: OverlayLine[] = [
         {
             label: `SMA ${String(options.fastAverage)}`,
-            colour: LINE_COLOURS.fastAverage,
+            role: "fast",
+            order: 0,
             values: chart.fastAverage,
             dashed: false,
         },
         {
             label: `SMA ${String(options.slowAverage)}`,
-            colour: LINE_COLOURS.slowAverage,
+            role: "slow",
+            order: 0,
             values: chart.slowAverage,
             dashed: false,
         },
     ];
     const volatilityLines: OverlayLine[] = [
         {
-            label: `${String(options.volatilityWindow)}-day realised`,
-            colour: LINE_COLOURS.realised,
+            label: `${String(options.volatilityWindow)}d realised`,
+            role: "realised",
+            order: 0,
             values: chart.volatilityPercent,
             dashed: false,
         },
@@ -83,23 +89,23 @@ export function buildChartModel(
     let breaches: BreachMarkers | null = null;
 
     if (analysis !== null && analysis.symbol === chart.symbol) {
-        analysis.models.forEach((model, i) => {
+        analysis.models.forEach((model, order) => {
             if (model.failure !== null) {
                 return;
             }
             volatilityLines.push({
-                label: `forecast ${model.name}`,
-                colour:
-                    LINE_COLOURS.forecasts[i % LINE_COLOURS.forecasts.length] ??
-                    LINE_COLOURS.realised,
+                label: modelLabel(model.name),
+                role: "forecast",
+                order,
                 values: alignToBars(chart.times, analysis.times, model.volatilityPercent),
                 dashed: false,
             });
             if (model.name === options.varModel) {
                 const percent = String(Math.round(analysis.confidence * 1000) / 10);
                 priceLines.push({
-                    label: `${percent}% VaR (${model.name})`,
-                    colour: THEME.varBand,
+                    label: `VaR ${percent}% ${modelLabel(model.name)}`,
+                    role: "var",
+                    order: 0,
                     values: alignToBars(chart.times, analysis.times, model.varPrice),
                     dashed: true,
                 });
@@ -107,7 +113,7 @@ export function buildChartModel(
                     chart.times,
                     model.breachTimes,
                     model.breachPrices,
-                    `breaches (${String(model.breachTimes.length)})`,
+                    `${String(model.breachTimes.length)} breaches`,
                 );
             }
         });
