@@ -97,6 +97,20 @@ splits, so a later fetch can differ from the committed manifest. In that case
 `check-data` reports a hash mismatch, and results computed from your snapshots
 will not exactly match published ones.
 
+### Running the evaluation
+
+One command runs the full out-of-sample evaluation from the snapshots:
+
+```
+$ ./build/macos-release/cli/zpew-cli eval --config configs/default.toml
+```
+
+It writes forecasts, losses, improvements over the baseline and a `run.json`
+with the git commit, compiler, config hash and the hash of every snapshot to
+`results/default/`. `configs/default.toml` documents every setting. The
+command warns when the binary was built from uncommitted changes, because such
+results cannot be traced back to a commit.
+
 ### Cross-checks
 
 Two scripts compare zpew against independent implementations on every snapshot
