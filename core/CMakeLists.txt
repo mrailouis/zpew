@@ -10,6 +10,7 @@ add_library(zpew_core STATIC
     src/data/validation.cpp
     src/io/binary_file.cpp
     src/io/sha256.cpp
+    src/models/ewma_model.cpp
     src/returns/log_returns.cpp
     src/returns/moving_average.cpp
     src/returns/realised_variance.cpp

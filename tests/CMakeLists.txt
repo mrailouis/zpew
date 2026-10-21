@@ -21,6 +21,7 @@ add_executable(zpew_tests
     error_test.cpp
     io/binary_file_test.cpp
     io/sha256_test.cpp
+    models/ewma_model_test.cpp
     returns/log_returns_test.cpp
     returns/moving_average_test.cpp
     returns/realised_variance_test.cpp
