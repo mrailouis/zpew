@@ -22,6 +22,7 @@ add_executable(zpew_tests
     io/binary_file_test.cpp
     io/sha256_test.cpp
     models/ewma_model_test.cpp
+    models/garch_params_test.cpp
     models/realised_vol_model_test.cpp
     models/vol_model_contract_test.cpp
     optimiser/nelder_mead_test.cpp
