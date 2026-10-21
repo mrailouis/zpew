@@ -6,7 +6,7 @@ add_library(zpew::options ALIAS zpew_options)
 target_compile_features(zpew_options INTERFACE cxx_std_20)
 
 target_compile_options(zpew_options INTERFACE
-    $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-Wall -Wextra -Wpedantic -Werror>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-Wall -Wextra -Wpedantic -Werror -ffp-contract=off>
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX /permissive- /utf-8 /Zc:__cplusplus>)
 
 target_compile_definitions(zpew_options INTERFACE
