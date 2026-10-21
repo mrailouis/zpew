@@ -8,6 +8,7 @@ import json
 import math
 import subprocess
 import sys
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -16,7 +17,6 @@ from arch import arch_model
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MANIFEST_PATH = REPO_ROOT / "data" / "manifest.json"
-SCALE = 100.0
 LIKELIHOOD_TOLERANCE = 1e-4
 SHAPE_TOLERANCE = 1e-3
 OMEGA_RELATIVE_TOLERANCE = 0.01
@@ -53,16 +53,32 @@ def fit_zpew(cli: Path, symbol: str) -> dict:
     return json.loads(output)
 
 
-def fit_arch(returns: list[float], backcast: float) -> Params:
-    scaled = np.asarray(returns) * SCALE
+def arch_scale(returns: list[float]) -> float:
+    deviation = float(np.std(returns))
+    return 10.0 ** -math.floor(math.log10(deviation))
+
+
+def fit_arch_at(returns: list[float], backcast: float, scale: float) -> Params | None:
+    scaled = np.asarray(returns) * scale
     model = arch_model(scaled, mean="Zero", vol="GARCH", p=1, q=1, dist="normal", rescale=False)
-    result = model.fit(disp="off", backcast=backcast * SCALE * SCALE,
-                       options={"maxiter": 2000, "ftol": 1e-12})
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        result = model.fit(disp="off", backcast=backcast * scale * scale,
+                           options={"maxiter": 2000, "ftol": 1e-12})
     if result.convergence_flag != 0:
-        raise RuntimeError(f"arch did not converge (flag {result.convergence_flag})")
-    return Params(omega=float(result.params["omega"]) / (SCALE * SCALE),
+        return None
+    return Params(omega=float(result.params["omega"]) / (scale * scale),
                   alpha=float(result.params["alpha[1]"]),
                   beta=float(result.params["beta[1]"]))
+
+
+def fit_arch(returns: list[float], backcast: float) -> tuple[Params, float]:
+    preferred = arch_scale(returns)
+    for scale in (preferred, preferred * 10.0, preferred / 10.0):
+        params = fit_arch_at(returns, backcast, scale)
+        if params is not None:
+            return params, scale
+    raise RuntimeError(f"arch did not converge at scales {preferred / 10:g} to {preferred * 10:g}")
 
 
 def compare(cli: Path, entry: dict) -> dict:
@@ -72,22 +88,24 @@ def compare(cli: Path, entry: dict) -> dict:
     if not math.isclose(backcast, zpew["backcast"], rel_tol=1e-12):
         raise RuntimeError(f"backcast differs: python {backcast}, zpew {zpew['backcast']}")
     zpew_params = Params(zpew["omega"], zpew["alpha"], zpew["beta"])
-    arch_params = fit_arch(returns, backcast)
+    arch_params, scale = fit_arch(returns, backcast)
     ll_zpew = log_likelihood(returns, zpew_params, backcast)
     ll_arch = log_likelihood(returns, arch_params, backcast)
     shape_ok = (abs(zpew_params.alpha - arch_params.alpha) <= SHAPE_TOLERANCE
                 and abs(zpew_params.beta - arch_params.beta) <= SHAPE_TOLERANCE
                 and abs(zpew_params.omega - arch_params.omega)
                 <= OMEGA_RELATIVE_TOLERANCE * arch_params.omega)
-    likelihood_ok = ll_zpew >= ll_arch - LIKELIHOOD_TOLERANCE
-    if likelihood_ok and shape_ok:
-        status = "ok"
-    elif likelihood_ok:
-        status = "flat likelihood"
-    else:
+    difference = ll_zpew - ll_arch
+    if difference < -LIKELIHOOD_TOLERANCE:
         status = "FAIL"
+    elif difference > LIKELIHOOD_TOLERANCE:
+        status = "zpew higher"
+    elif shape_ok:
+        status = "ok"
+    else:
+        status = "flat likelihood"
     return {"symbol": entry["symbol"], "observations": len(returns), "zpew": zpew_params,
-            "arch": arch_params, "ll_difference": ll_zpew - ll_arch, "status": status}
+            "arch": arch_params, "ll_difference": difference, "scale": scale, "status": status}
 
 
 def main(argv: list[str]) -> int:
@@ -100,9 +118,9 @@ def main(argv: list[str]) -> int:
     wanted = {s.strip().upper() for s in args.only.split(",") if s.strip()}
     entries = [e for e in manifest["assets"] if not wanted or e["symbol"] in wanted]
 
-    print(f"{'symbol':<8} {'obs':>6}  {'omega zpew / arch':>25}  {'alpha zpew / arch':>17}  "
-          f"{'beta zpew / arch':>17}  {'ll zpew - arch':>14}  status")
-    counts = {"ok": 0, "flat likelihood": 0, "FAIL": 0}
+    print(f"{'symbol':<8} {'obs':>6} {'scale':>6}  {'omega zpew / arch':>25}  "
+          f"{'alpha zpew / arch':>17}  {'beta zpew / arch':>17}  {'ll zpew - arch':>14}  status")
+    counts = {"ok": 0, "zpew higher": 0, "flat likelihood": 0, "FAIL": 0}
     for entry in entries:
         try:
             row = compare(args.cli, entry)
@@ -112,12 +130,14 @@ def main(argv: list[str]) -> int:
             continue
         counts[row["status"]] += 1
         z, a = row["zpew"], row["arch"]
-        print(f"{row['symbol']:<8} {row['observations']:>6}  {z.omega:.4e} / {a.omega:.4e}  "
+        print(f"{row['symbol']:<8} {row['observations']:>6} {row['scale']:>6g}  "
+              f"{z.omega:.4e} / {a.omega:.4e}  "
               f"{z.alpha:.5f} / {a.alpha:.5f}  {z.beta:.5f} / {a.beta:.5f}  "
               f"{row['ll_difference']:>14.3e}  {row['status']}")
 
-    print(f"\n{counts['ok']} ok, {counts['flat likelihood']} flat likelihood, "
-          f"{counts['FAIL']} failed, of {len(entries)} assets")
+    print(f"\n{counts['ok']} ok, {counts['zpew higher']} zpew higher, "
+          f"{counts['flat likelihood']} flat likelihood, {counts['FAIL']} failed, "
+          f"of {len(entries)} assets")
     return 1 if counts["FAIL"] else 0
 
 
