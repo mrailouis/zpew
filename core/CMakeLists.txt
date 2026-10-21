@@ -8,6 +8,7 @@ add_library(zpew_core STATIC
     src/data/snapshot_data_source.cpp
     src/data/trading_calendar.cpp
     src/data/validation.cpp
+    src/evaluation/rolling_forecast.cpp
     src/io/binary_file.cpp
     src/io/sha256.cpp
     src/models/ewma_model.cpp
