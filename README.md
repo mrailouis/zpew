@@ -97,6 +97,25 @@ splits, so a later fetch can differ from the committed manifest. In that case
 `check-data` reports a hash mismatch, and results computed from your snapshots
 will not exactly match published ones.
 
+### Cross-checks
+
+Two scripts compare zpew against independent implementations on every snapshot
+in the manifest. The EWMA check only needs the standard library:
+
+```
+$ python3 python/crosscheck_ewma.py --cli build/macos-release/cli/zpew-cli
+```
+
+The GARCH(1,1) check compares zpew's fits with the
+[arch](https://github.com/bashtage/arch) library. Install its pinned
+dependencies in a virtual environment first:
+
+```
+$ python3 -m venv .venv
+$ .venv/bin/pip install -r python/requirements-crosscheck.txt
+$ .venv/bin/python python/crosscheck.py --cli build/macos-release/cli/zpew-cli
+```
+
 ### License
 
 zpew is licensed under the [Apache License 2.0](LICENSE).
