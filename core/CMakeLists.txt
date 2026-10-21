@@ -12,6 +12,7 @@ add_library(zpew_core STATIC
     src/io/sha256.cpp
     src/models/ewma_model.cpp
     src/models/realised_vol_model.cpp
+    src/optimiser/nelder_mead.cpp
     src/returns/log_returns.cpp
     src/returns/moving_average.cpp
     src/returns/realised_variance.cpp

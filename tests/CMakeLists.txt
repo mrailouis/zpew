@@ -24,6 +24,7 @@ add_executable(zpew_tests
     models/ewma_model_test.cpp
     models/realised_vol_model_test.cpp
     models/vol_model_contract_test.cpp
+    optimiser/nelder_mead_test.cpp
     returns/log_returns_test.cpp
     returns/moving_average_test.cpp
     returns/realised_variance_test.cpp
