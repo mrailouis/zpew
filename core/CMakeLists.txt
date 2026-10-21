@@ -27,6 +27,7 @@ add_library(zpew_core STATIC
     src/returns/rolling_mean.cpp
     src/var/backtest.cpp
     src/var/normal_quantile.cpp
+    src/var/pooled_backtest.cpp
     src/version.cpp)
 add_library(zpew::core ALIAS zpew_core)
 
