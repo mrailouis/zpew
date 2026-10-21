@@ -21,6 +21,7 @@ export interface AssetSummary {
     readonly name: string;
     readonly assetClass: string;
     readonly calendar: string;
+    readonly source: string;
     readonly firstDate: string;
     readonly lastDate: string;
     readonly rows: number;

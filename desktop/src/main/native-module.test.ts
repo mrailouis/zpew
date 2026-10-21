@@ -48,7 +48,12 @@ describe("native module", () => {
     it("lists the assets in a manifest", async () => {
         const assets = await native.listAssets(fixtureManifest);
         expect(assets).toEqual([
-            expect.objectContaining({ symbol: "SIM", calendar: "weekdays", rows: FIXTURE_BARS }),
+            expect.objectContaining({
+                symbol: "SIM",
+                calendar: "weekdays",
+                source: "hand-made",
+                rows: FIXTURE_BARS,
+            }),
         ]);
     });
 

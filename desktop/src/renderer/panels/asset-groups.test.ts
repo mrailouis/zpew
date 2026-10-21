@@ -8,6 +8,7 @@ const asset = (symbol: string, name: string, assetClass: string): AssetSummary =
     name,
     assetClass,
     calendar: "weekdays",
+    source: "tiingo",
     firstDate: "2000-01-03",
     lastDate: "2026-09-30",
     rows: 100,

@@ -24,6 +24,7 @@ struct AssetRow {
     std::string name;
     std::string asset_class;
     std::string calendar;
+    std::string source;
     std::string first_date;
     std::string last_date;
     std::size_t rows{};
@@ -45,6 +46,7 @@ public:
                                  .name = asset.name,
                                  .asset_class = asset.asset_class,
                                  .calendar = std::string{data::to_string(asset.calendar)},
+                                 .source = asset.source,
                                  .first_date = data::format_iso_date(asset.first_date),
                                  .last_date = data::format_iso_date(asset.last_date),
                                  .rows = asset.rows});
@@ -64,6 +66,7 @@ public:
             item.Set("name", row.name);
             item.Set("assetClass", row.asset_class);
             item.Set("calendar", row.calendar);
+            item.Set("source", row.source);
             item.Set("firstDate", row.first_date);
             item.Set("lastDate", row.last_date);
             item.Set("rows", static_cast<double>(row.rows));

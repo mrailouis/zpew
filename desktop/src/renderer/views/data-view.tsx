@@ -7,6 +7,7 @@ import { buildCoverage } from "../coverage/coverage";
 import { coverageColours } from "../coverage/coverage-colours";
 import { CoverageGrid, CoverageLegend } from "../coverage/coverage-grid";
 import { assetClassLabel } from "../panels/asset-groups";
+import { sourceNote } from "./source-note";
 
 interface DataViewProps {
     readonly asset: AssetSummary | undefined;
@@ -86,8 +87,8 @@ export function DataView({ asset, chart, theme }: DataViewProps) {
                 />
             </div>
             <p className="note">
-                Daily bars from Tiingo, adjusted for splits and dividends. Gaps are runs of missing
-                sessions longer than the trading calendar allows.
+                {sourceNote(asset.source)} Gaps are runs of missing sessions longer than the trading
+                calendar allows.
             </p>
 
             <div className="section-title">
