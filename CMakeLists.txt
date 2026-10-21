@@ -10,6 +10,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(ZPEW_BUILD_TESTS "Build the zpew test suite" ${PROJECT_IS_TOP_LEVEL})
 option(ZPEW_BUILD_CLI "Build zpew-cli" ON)
+option(ZPEW_BUILD_APP "Build zpew-app" ON)
 option(ZPEW_ENABLE_SANITIZERS "Build zpew targets with ASan and UBSan where supported" OFF)
 option(ZPEW_ENABLE_CLANG_TIDY "Run clang-tidy while compiling zpew targets" OFF)
 
@@ -20,6 +21,10 @@ add_subdirectory(core)
 
 if(ZPEW_BUILD_CLI)
     add_subdirectory(cli)
+endif()
+
+if(ZPEW_BUILD_APP)
+    add_subdirectory(app)
 endif()
 
 if(ZPEW_BUILD_TESTS)
