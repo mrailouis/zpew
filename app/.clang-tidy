@@ -1,6 +1,0 @@
----
-InheritParentConfig: true
-Checks: '-bugprone-signed-bitwise'
-CheckOptions:
-  - { key: misc-include-cleaner.IgnoreHeaders, value: 'OpenGL\.framework/Headers/gl\.h;OpenGL/gl\.h;GL/gl\.h' }
-...

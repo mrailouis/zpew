@@ -19,7 +19,7 @@ IncludeCategories:
     Priority: 1
   - Regex: '^<zpew/'
     Priority: 2
-  - Regex: '^<(catch2|imgui|implot|GLFW|nlohmann|toml\+\+)/'
+  - Regex: '^<(catch2|nlohmann|toml\+\+)/'
     Priority: 3
   - Regex: '^<'
     Priority: 4

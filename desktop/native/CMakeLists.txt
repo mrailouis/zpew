@@ -6,7 +6,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(ZPEW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(ZPEW_BUILD_CLI OFF CACHE BOOL "" FORCE)
-set(ZPEW_BUILD_APP OFF CACHE BOOL "" FORCE)
 get_filename_component(zpew_root ${CMAKE_CURRENT_SOURCE_DIR}/../.. ABSOLUTE)
 add_subdirectory(${zpew_root} zpew EXCLUDE_FROM_ALL)
 

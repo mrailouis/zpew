@@ -13,8 +13,8 @@ results have been published yet.
 
 zpew needs CMake 3.25 or newer and a C++20 compiler. It is developed on macOS
 with Apple Clang and on Windows with Visual Studio 2022 or newer. Linux support
-is planned. CMake downloads every other dependency (Catch2, nlohmann/json,
-Dear ImGui, ImPlot and GLFW) at configure time, pinned by version and hash.
+is planned. CMake downloads every other dependency (Catch2, nlohmann/json and
+toml++) at configure time, pinned by version and hash.
 
 To build on macOS:
 
@@ -27,7 +27,7 @@ $ ./build/macos-release/cli/zpew-cli --version
 zpew-cli 0.1.0
 ```
 
-The desktop app is built as `build/macos-release/app/zpew-app.app`.
+The desktop app lives in `desktop/` and is built with npm; see `desktop/package.json`.
 
 To build on Windows, run these from a Developer PowerShell for Visual Studio:
 
