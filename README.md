@@ -107,7 +107,14 @@ $ ./build/macos-release/cli/zpew-cli eval --config configs/default.toml
 
 It writes forecasts, losses, improvements over the baseline and a `run.json`
 with the git commit, compiler, config hash and the hash of every snapshot to
-`results/default/`. `configs/default.toml` documents every setting. The
+`results/default/eval/`. The VaR backtest works the same way and writes to
+`results/default/backtest/`:
+
+```
+$ ./build/macos-release/cli/zpew-cli backtest --config configs/default.toml
+```
+
+ `configs/default.toml` documents every setting. The
 command warns when the binary was built from uncommitted changes, because such
 results cannot be traced back to a commit.
 
