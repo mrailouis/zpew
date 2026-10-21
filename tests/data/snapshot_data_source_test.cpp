@@ -11,10 +11,10 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
 #include <catch2/matchers/catch_matchers_string.hpp>
-
-#include <filesystem>
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
+
+#include <filesystem>
 #include <string>
 #include <string_view>
 #include <vector>

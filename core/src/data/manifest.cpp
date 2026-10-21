@@ -4,6 +4,9 @@
 #include <zpew/error.hpp>
 #include <zpew/io/binary_file.hpp>
 
+#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
+
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -11,8 +14,6 @@
 #include <filesystem>
 #include <format>
 #include <functional>
-#include <nlohmann/json.hpp>
-#include <nlohmann/json_fwd.hpp>
 #include <optional>
 #include <set>
 #include <string>
