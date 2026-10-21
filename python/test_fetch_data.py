@@ -187,6 +187,17 @@ class RequestPacerTest(unittest.TestCase):
         self.assertEqual(pacer.wait_for_slot(), 86400.0)
 
 
+class StartDateTest(unittest.TestCase):
+    def test_an_asset_start_date_overrides_an_earlier_requested_start(self) -> None:
+        asset = fetch_data.Asset("ETHUSD", "ethusd", "crypto", "crypto", "daily", "Ether", "2015-08-09")
+        self.assertEqual(asset.first_request_date(dt.date(1990, 1, 1)), dt.date(2015, 8, 9))
+        self.assertEqual(asset.first_request_date(dt.date(2020, 1, 1)), dt.date(2020, 1, 1))
+
+    def test_assets_without_a_start_date_use_the_requested_start(self) -> None:
+        asset = fetch_data.Asset("SPY", "spy", "daily", "us_equity_broad", "weekdays", "S&P 500")
+        self.assertEqual(asset.first_request_date(dt.date(1990, 1, 1)), dt.date(1990, 1, 1))
+
+
 class UniverseTest(unittest.TestCase):
     def test_committed_universe_is_well_formed(self) -> None:
         universe = fetch_data.read_universe()

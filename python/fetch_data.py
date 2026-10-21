@@ -51,6 +51,12 @@ class Asset:
     asset_class: str
     calendar: str
     name: str
+    start_date: str = ""
+
+    def first_request_date(self, requested: dt.date) -> dt.date:
+        if not self.start_date:
+            return requested
+        return max(requested, dt.date.fromisoformat(self.start_date))
 
 
 @dataclass(frozen=True)
@@ -387,9 +393,10 @@ def main(argv: list[str]) -> int:
         if not args.refresh and is_current(entries.get(asset.symbol)):
             log(f"{prefix}: current, skipped")
             continue
-        url = request_url(asset, args.start, args.end)
+        start = asset.first_request_date(args.start)
+        url = request_url(asset, start, args.end)
         try:
-            bars = fetch_bars(client, asset, args.start, args.end)
+            bars = fetch_bars(client, asset, start, args.end)
             problems = validate_bars(bars, asset.calendar, asset.symbol)
             if problems:
                 shown = "\n    ".join(problems[:10])
