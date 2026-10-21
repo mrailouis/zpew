@@ -19,6 +19,7 @@ add_executable(zpew_tests
     data/trading_calendar_test.cpp
     data/validation_test.cpp
     error_test.cpp
+    evaluation/proxies_and_losses_test.cpp
     evaluation/rolling_forecast_test.cpp
     io/binary_file_test.cpp
     io/sha256_test.cpp
