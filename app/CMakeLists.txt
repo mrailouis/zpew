@@ -1,9 +1,14 @@
 include(ZpewGuiDependencies)
 
 add_executable(zpew_app
+    src/chart/candlestick_plot.cpp
+    src/chart/chart_series.cpp
+    src/chart/chart_view.cpp
     src/main.cpp
     src/platform/glfw_window.cpp
-    src/platform/imgui_session.cpp)
+    src/platform/imgui_session.cpp
+    src/ui/symbol_picker.cpp
+    src/ui/terminal_app.cpp)
 
 set_target_properties(zpew_app PROPERTIES OUTPUT_NAME zpew-app)
 target_include_directories(zpew_app PRIVATE src)

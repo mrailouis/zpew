@@ -1,53 +1,68 @@
 #include "platform/glfw_window.hpp"
 #include "platform/imgui_session.hpp"
+#include "ui/terminal_app.hpp"
 
+#include <zpew/data/manifest.hpp>
 #include <zpew/version.hpp>
 
+#include <cstddef>
 #include <cstdlib>
 #include <exception>
-#include <imgui.h>
+#include <filesystem>
 #include <implot.h>
 #include <iostream>
+#include <optional>
+#include <span>
 #include <string>
+#include <string_view>
+#include <system_error>
 
 namespace {
 
-constexpr int kInitialWidth = 1280;
-constexpr int kInitialHeight = 800;
+constexpr int kInitialWidth = 1600;
+constexpr int kInitialHeight = 1000;
 
-std::string window_title() {
-    return "zpew " + std::string{zpew::version()};
-}
-
-void draw_main_view() {
-    const ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(viewport->WorkPos);
-    ImGui::SetNextWindowSize(viewport->WorkSize);
-
-    constexpr ImGuiWindowFlags kFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
-                                        ImGuiWindowFlags_NoSavedSettings |
-                                        ImGuiWindowFlags_NoBringToFrontOnFocus;
-    if (ImGui::Begin("zpew", nullptr, kFlags)) {
-        ImGui::TextUnformatted(window_title().c_str());
-        if (ImPlot::BeginPlot("##chart", ImVec2{-1.0F, -1.0F})) {
-            ImPlot::EndPlot();
+std::optional<std::filesystem::path> manifest_from_arguments(std::span<char*> args) {
+    if (args.size() == 3 && std::string_view{args[1]} == "--manifest") {
+        return std::filesystem::path{args[2]};
+    }
+    if (const auto from_working_directory =
+            zpew::data::find_manifest(std::filesystem::current_path())) {
+        return from_working_directory;
+    }
+    if (!args.empty()) {
+        std::error_code error;
+        const auto executable = std::filesystem::canonical(args[0], error);
+        if (!error) {
+            return zpew::data::find_manifest(executable.parent_path());
         }
     }
-    ImGui::End();
+    return std::nullopt;
+}
+
+void configure_plot_style() {
+    ImPlotStyle& style = ImPlot::GetStyle();
+    style.UseISO8601 = true;
+    style.Use24HourClock = true;
+    style.UseLocalTime = false;
 }
 
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     try {
-        const zpew::app::GlfwWindow window{
-            {.width = kInitialWidth, .height = kInitialHeight, .title = window_title()}};
+        const std::span<char*> args{argv, static_cast<std::size_t>(argc)};
+        const zpew::app::GlfwWindow window{{.width = kInitialWidth,
+                                            .height = kInitialHeight,
+                                            .title = "zpew " + std::string{zpew::version()}}};
         const zpew::app::ImGuiSession gui{window};
+        configure_plot_style();
+        zpew::app::TerminalApp terminal{manifest_from_arguments(args)};
 
         while (!window.should_close()) {
             zpew::app::GlfwWindow::poll_events();
             zpew::app::ImGuiSession::begin_frame();
-            draw_main_view();
+            terminal.draw();
             zpew::app::ImGuiSession::render(window);
             window.swap_buffers();
         }
