@@ -1,0 +1,106 @@
+symbol,tiingo_ticker,endpoint,asset_class,calendar,name
+SPY,spy,daily,us_equity_broad,weekdays,SPDR S&P 500 ETF Trust
+QQQ,qqq,daily,us_equity_broad,weekdays,Invesco QQQ Trust
+DIA,dia,daily,us_equity_broad,weekdays,SPDR Dow Jones Industrial Average ETF Trust
+IWM,iwm,daily,us_equity_broad,weekdays,iShares Russell 2000 ETF
+MDY,mdy,daily,us_equity_broad,weekdays,SPDR S&P MidCap 400 ETF Trust
+VTI,vti,daily,us_equity_broad,weekdays,Vanguard Total Stock Market ETF
+RSP,rsp,daily,us_equity_broad,weekdays,Invesco S&P 500 Equal Weight ETF
+IWD,iwd,daily,us_equity_style,weekdays,iShares Russell 1000 Value ETF
+IWF,iwf,daily,us_equity_style,weekdays,iShares Russell 1000 Growth ETF
+USMV,usmv,daily,us_equity_style,weekdays,iShares MSCI USA Min Vol Factor ETF
+MTUM,mtum,daily,us_equity_style,weekdays,iShares MSCI USA Momentum Factor ETF
+XLB,xlb,daily,us_equity_sector,weekdays,Materials Select Sector SPDR Fund
+XLE,xle,daily,us_equity_sector,weekdays,Energy Select Sector SPDR Fund
+XLF,xlf,daily,us_equity_sector,weekdays,Financial Select Sector SPDR Fund
+XLI,xli,daily,us_equity_sector,weekdays,Industrial Select Sector SPDR Fund
+XLK,xlk,daily,us_equity_sector,weekdays,Technology Select Sector SPDR Fund
+XLP,xlp,daily,us_equity_sector,weekdays,Consumer Staples Select Sector SPDR Fund
+XLU,xlu,daily,us_equity_sector,weekdays,Utilities Select Sector SPDR Fund
+XLV,xlv,daily,us_equity_sector,weekdays,Health Care Select Sector SPDR Fund
+XLY,xly,daily,us_equity_sector,weekdays,Consumer Discretionary Select Sector SPDR Fund
+XLRE,xlre,daily,us_equity_sector,weekdays,Real Estate Select Sector SPDR Fund
+XLC,xlc,daily,us_equity_sector,weekdays,Communication Services Select Sector SPDR Fund
+SMH,smh,daily,us_equity_industry,weekdays,VanEck Semiconductor ETF
+XBI,xbi,daily,us_equity_industry,weekdays,SPDR S&P Biotech ETF
+IBB,ibb,daily,us_equity_industry,weekdays,iShares Biotechnology ETF
+KRE,kre,daily,us_equity_industry,weekdays,SPDR S&P Regional Banking ETF
+KBE,kbe,daily,us_equity_industry,weekdays,SPDR S&P Bank ETF
+XHB,xhb,daily,us_equity_industry,weekdays,SPDR S&P Homebuilders ETF
+ITB,itb,daily,us_equity_industry,weekdays,iShares U.S. Home Construction ETF
+XRT,xrt,daily,us_equity_industry,weekdays,SPDR S&P Retail ETF
+XME,xme,daily,us_equity_industry,weekdays,SPDR S&P Metals & Mining ETF
+GDX,gdx,daily,us_equity_industry,weekdays,VanEck Gold Miners ETF
+OIH,oih,daily,us_equity_industry,weekdays,VanEck Oil Services ETF
+VNQ,vnq,daily,us_equity_industry,weekdays,Vanguard Real Estate ETF
+AAPL,aapl,daily,us_equity_single,weekdays,Apple Inc.
+MSFT,msft,daily,us_equity_single,weekdays,Microsoft Corporation
+AMZN,amzn,daily,us_equity_single,weekdays,Amazon.com Inc.
+NVDA,nvda,daily,us_equity_single,weekdays,NVIDIA Corporation
+JPM,jpm,daily,us_equity_single,weekdays,JPMorgan Chase & Co.
+XOM,xom,daily,us_equity_single,weekdays,Exxon Mobil Corporation
+JNJ,jnj,daily,us_equity_single,weekdays,Johnson & Johnson
+PG,pg,daily,us_equity_single,weekdays,Procter & Gamble Company
+KO,ko,daily,us_equity_single,weekdays,Coca-Cola Company
+TSLA,tsla,daily,us_equity_single,weekdays,Tesla Inc.
+EFA,efa,daily,intl_developed,weekdays,iShares MSCI EAFE ETF
+VEA,vea,daily,intl_developed,weekdays,Vanguard FTSE Developed Markets ETF
+EWJ,ewj,daily,intl_developed,weekdays,iShares MSCI Japan ETF
+EWG,ewg,daily,intl_developed,weekdays,iShares MSCI Germany ETF
+EWU,ewu,daily,intl_developed,weekdays,iShares MSCI United Kingdom ETF
+EWC,ewc,daily,intl_developed,weekdays,iShares MSCI Canada ETF
+EWA,ewa,daily,intl_developed,weekdays,iShares MSCI Australia ETF
+EWQ,ewq,daily,intl_developed,weekdays,iShares MSCI France ETF
+EWL,ewl,daily,intl_developed,weekdays,iShares MSCI Switzerland ETF
+EWH,ewh,daily,intl_developed,weekdays,iShares MSCI Hong Kong ETF
+EWS,ews,daily,intl_developed,weekdays,iShares MSCI Singapore ETF
+EEM,eem,daily,emerging,weekdays,iShares MSCI Emerging Markets ETF
+VWO,vwo,daily,emerging,weekdays,Vanguard FTSE Emerging Markets ETF
+FXI,fxi,daily,emerging,weekdays,iShares China Large-Cap ETF
+EWZ,ewz,daily,emerging,weekdays,iShares MSCI Brazil ETF
+EWT,ewt,daily,emerging,weekdays,iShares MSCI Taiwan ETF
+EWY,ewy,daily,emerging,weekdays,iShares MSCI South Korea ETF
+INDA,inda,daily,emerging,weekdays,iShares MSCI India ETF
+EWW,eww,daily,emerging,weekdays,iShares MSCI Mexico ETF
+EZA,eza,daily,emerging,weekdays,iShares MSCI South Africa ETF
+TUR,tur,daily,emerging,weekdays,iShares MSCI Turkey ETF
+EIDO,eido,daily,emerging,weekdays,iShares MSCI Indonesia ETF
+BIL,bil,daily,rates,weekdays,SPDR Bloomberg 1-3 Month T-Bill ETF
+SHY,shy,daily,rates,weekdays,iShares 1-3 Year Treasury Bond ETF
+IEI,iei,daily,rates,weekdays,iShares 3-7 Year Treasury Bond ETF
+IEF,ief,daily,rates,weekdays,iShares 7-10 Year Treasury Bond ETF
+TLH,tlh,daily,rates,weekdays,iShares 10-20 Year Treasury Bond ETF
+TLT,tlt,daily,rates,weekdays,iShares 20+ Year Treasury Bond ETF
+TIP,tip,daily,rates,weekdays,iShares TIPS Bond ETF
+GOVT,govt,daily,rates,weekdays,iShares U.S. Treasury Bond ETF
+AGG,agg,daily,credit,weekdays,iShares Core U.S. Aggregate Bond ETF
+BND,bnd,daily,credit,weekdays,Vanguard Total Bond Market ETF
+LQD,lqd,daily,credit,weekdays,iShares iBoxx $ Investment Grade Corporate Bond ETF
+HYG,hyg,daily,credit,weekdays,iShares iBoxx $ High Yield Corporate Bond ETF
+JNK,jnk,daily,credit,weekdays,SPDR Bloomberg High Yield Bond ETF
+EMB,emb,daily,credit,weekdays,iShares J.P. Morgan USD Emerging Markets Bond ETF
+MUB,mub,daily,credit,weekdays,iShares National Muni Bond ETF
+MBB,mbb,daily,credit,weekdays,iShares MBS ETF
+GLD,gld,daily,commodity,weekdays,SPDR Gold Shares
+SLV,slv,daily,commodity,weekdays,iShares Silver Trust
+PPLT,pplt,daily,commodity,weekdays,abrdn Platinum ETF Trust
+PALL,pall,daily,commodity,weekdays,abrdn Palladium ETF Trust
+USO,uso,daily,commodity,weekdays,United States Oil Fund
+UNG,ung,daily,commodity,weekdays,United States Natural Gas Fund
+UGA,uga,daily,commodity,weekdays,United States Gasoline Fund
+DBC,dbc,daily,commodity,weekdays,Invesco DB Commodity Index Tracking Fund
+DBA,dba,daily,commodity,weekdays,Invesco DB Agriculture Fund
+DBB,dbb,daily,commodity,weekdays,Invesco DB Base Metals Fund
+CPER,cper,daily,commodity,weekdays,United States Copper Index Fund
+UUP,uup,daily,currency,weekdays,Invesco DB US Dollar Index Bullish Fund
+FXE,fxe,daily,currency,weekdays,Invesco CurrencyShares Euro Trust
+FXY,fxy,daily,currency,weekdays,Invesco CurrencyShares Japanese Yen Trust
+FXB,fxb,daily,currency,weekdays,Invesco CurrencyShares British Pound Sterling Trust
+FXF,fxf,daily,currency,weekdays,Invesco CurrencyShares Swiss Franc Trust
+FXA,fxa,daily,currency,weekdays,Invesco CurrencyShares Australian Dollar Trust
+FXC,fxc,daily,currency,weekdays,Invesco CurrencyShares Canadian Dollar Trust
+BTCUSD,btcusd,crypto,crypto,daily,Bitcoin / US Dollar
+ETHUSD,ethusd,crypto,crypto,daily,Ether / US Dollar
+LTCUSD,ltcusd,crypto,crypto,daily,Litecoin / US Dollar
+XRPUSD,xrpusd,crypto,crypto,daily,XRP / US Dollar
+DOGEUSD,dogeusd,crypto,crypto,daily,Dogecoin / US Dollar

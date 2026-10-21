@@ -94,3 +94,6 @@ __pycache__/
 
 # Local docs
 /docs/
+
+# Secrets
+.env
