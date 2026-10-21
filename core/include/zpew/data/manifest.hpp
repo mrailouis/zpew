@@ -5,6 +5,7 @@
 #include <chrono>
 #include <cstddef>
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -47,5 +48,7 @@ private:
                                       const std::filesystem::path& directory,
                                       std::string_view source_name);
 [[nodiscard]] Manifest load_manifest(const std::filesystem::path& manifest_path);
+[[nodiscard]] std::optional<std::filesystem::path>
+find_manifest(const std::filesystem::path& start);
 
 }

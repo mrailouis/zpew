@@ -1,5 +1,6 @@
 #include "data/bar_builders.hpp"
 #include "data/manifest_builders.hpp"
+#include "support/temporary_directory.hpp"
 
 #include <zpew/data/manifest.hpp>
 #include <zpew/data/trading_calendar.hpp>
@@ -133,4 +134,22 @@ TEST_CASE("symbols and files must be unique", "[data][manifest]") {
     third["file"] = "snapshots/SPY.csv";
     duplicate_file["assets"].push_back(third);
     require_rejected(duplicate_file, "assets[1]: duplicate file 'snapshots/SPY.csv'");
+}
+
+TEST_CASE("find_manifest walks up from a nested directory", "[data][manifest]") {
+    const zpew::test::TemporaryDirectory root{"zpew_find_manifest_test"};
+    zpew::test::write_bytes(root.path() / "data" / "manifest.json", "{}");
+    const auto nested = root.path() / "build" / "app" / "zpew-app.app" / "Contents" / "MacOS";
+    std::filesystem::create_directories(nested);
+
+    const std::filesystem::path found =
+        zpew::data::find_manifest(nested).value_or(std::filesystem::path{});
+    REQUIRE_FALSE(found.empty());
+    REQUIRE(std::filesystem::equivalent(found, root.path() / "data" / "manifest.json"));
+    REQUIRE(zpew::data::find_manifest(root.path()).has_value());
+}
+
+TEST_CASE("find_manifest returns nothing when no manifest exists above", "[data][manifest]") {
+    const zpew::test::TemporaryDirectory root{"zpew_find_manifest_missing_test"};
+    REQUIRE_FALSE(zpew::data::find_manifest(root.path()).has_value());
 }

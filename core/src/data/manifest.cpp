@@ -13,9 +13,11 @@
 #include <functional>
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
+#include <optional>
 #include <set>
 #include <string>
 #include <string_view>
+#include <system_error>
 #include <utility>
 #include <vector>
 
@@ -256,6 +258,24 @@ Manifest parse_manifest(std::string_view json_text, const std::filesystem::path&
         assets.push_back(std::move(asset));
     }
     return Manifest{directory, std::move(assets)};
+}
+
+std::optional<std::filesystem::path> find_manifest(const std::filesystem::path& start) {
+    std::error_code error;
+    std::filesystem::path directory = std::filesystem::absolute(start, error);
+    if (error) {
+        return std::nullopt;
+    }
+    while (true) {
+        std::filesystem::path candidate = directory / "data" / "manifest.json";
+        if (std::filesystem::is_regular_file(candidate, error)) {
+            return candidate;
+        }
+        if (!directory.has_parent_path() || directory.parent_path() == directory) {
+            return std::nullopt;
+        }
+        directory = directory.parent_path();
+    }
 }
 
 Manifest load_manifest(const std::filesystem::path& manifest_path) {
