@@ -7,7 +7,8 @@ FetchContent_Declare(Catch2
     SYSTEM)
 FetchContent_MakeAvailable(Catch2)
 set_target_properties(Catch2 Catch2WithMain PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
-set_target_properties(Catch2 Catch2WithMain PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
+zpew_configure_third_party_target(Catch2)
+zpew_configure_third_party_target(Catch2WithMain)
 
 add_executable(zpew_tests
     version_test.cpp)
