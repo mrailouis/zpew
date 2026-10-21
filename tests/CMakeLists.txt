@@ -82,6 +82,24 @@ if(ZPEW_BUILD_CLI)
         COMMAND zpew_cli forecast --symbol TEST --model ewma --alpha 0.1)
     set_tests_properties(cli.forecast_rejects_unknown_options PROPERTIES WILL_FAIL TRUE)
 
+    add_test(NAME cli.fit_needs_enough_returns_for_garch
+        COMMAND zpew_cli fit --symbol TEST --model garch
+                --manifest ${zpew_cli_fixtures}/valid/manifest.json)
+    set_tests_properties(cli.fit_needs_enough_returns_for_garch PROPERTIES
+        PASS_REGULAR_EXPRESSION "GARCH needs at least 500 returns to fit, got 2")
+
+    add_test(NAME cli.fit_rejects_parameter_free_models
+        COMMAND zpew_cli fit --symbol TEST --model ewma
+                --manifest ${zpew_cli_fixtures}/valid/manifest.json)
+    set_tests_properties(cli.fit_rejects_parameter_free_models PROPERTIES
+        PASS_REGULAR_EXPRESSION "fit supports --model garch only")
+
+    add_test(NAME cli.fit_rejects_bad_targeting_values
+        COMMAND zpew_cli fit --symbol TEST --model garch --targeting maybe
+                --manifest ${zpew_cli_fixtures}/valid/manifest.json)
+    set_tests_properties(cli.fit_rejects_bad_targeting_values PROPERTIES
+        PASS_REGULAR_EXPRESSION "--targeting expects on or off")
+
     add_test(NAME cli.check_data_fails_on_missing_manifest
         COMMAND zpew_cli check-data --manifest ${zpew_cli_fixtures}/missing/manifest.json)
     set_tests_properties(cli.check_data_fails_on_missing_manifest PROPERTIES WILL_FAIL TRUE)

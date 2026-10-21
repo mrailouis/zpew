@@ -1,5 +1,6 @@
 #include "check_data_command.hpp"
 #include "exit_code.hpp"
+#include "fit_command.hpp"
 #include "forecast_command.hpp"
 #include "manifest_path.hpp"
 #include "options.hpp"
@@ -22,7 +23,11 @@ constexpr std::string_view kUsage =
     "       zpew-cli forecast --symbol <symbol> --model ewma [--lambda 0.94] [--seed 21]\n"
     "                         [--manifest <path>]\n"
     "       zpew-cli forecast --symbol <symbol> --model realised [--window 21]\n"
-    "                         [--manifest <path>]\n";
+    "                         [--manifest <path>]\n"
+    "       zpew-cli forecast --symbol <symbol> --model garch [--fit-window 1000]\n"
+    "                         [--targeting on|off] [--manifest <path>]\n"
+    "       zpew-cli fit --symbol <symbol> --model garch [--targeting on|off] [--manifest "
+    "<path>]\n";
 
 int run(std::span<const std::string_view> args) {
     if (args.size() == 1 && args.front() == "--version") {
@@ -41,8 +46,13 @@ int run(std::span<const std::string_view> args) {
     }
     if (command == "forecast") {
         const zpew::cli::Options options{
-            rest, {"symbol", "model", "lambda", "seed", "window", "manifest"}};
+            rest,
+            {"symbol", "model", "lambda", "seed", "window", "fit-window", "targeting", "manifest"}};
         return zpew::cli::run_forecast(options, std::cout);
+    }
+    if (command == "fit") {
+        const zpew::cli::Options options{rest, {"symbol", "model", "targeting", "manifest"}};
+        return zpew::cli::run_fit(options, std::cout);
     }
     throw zpew::cli::UsageError{std::string{"unknown command '"} + std::string{command} + "'"};
 }
