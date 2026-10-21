@@ -1,6 +1,8 @@
 include(ZpewGuiDependencies)
 
 add_executable(zpew_app
+    src/analysis/analysis_worker.cpp
+    src/analysis/asset_analysis.cpp
     src/chart/candlestick_plot.cpp
     src/chart/chart_series.cpp
     src/chart/chart_view.cpp
