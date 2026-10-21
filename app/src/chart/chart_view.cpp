@@ -1,5 +1,6 @@
 #include "chart/chart_view.hpp"
 
+#include "analysis/asset_analysis.hpp"
 #include "chart/candlestick_plot.hpp"
 #include "chart/chart_series.hpp"
 #include "chart/chart_settings.hpp"
@@ -24,6 +25,12 @@ constexpr ImVec4 kFastAverageColour{0.98F, 0.75F, 0.18F, 1.0F};
 constexpr ImVec4 kSlowAverageColour{0.36F, 0.62F, 0.98F, 1.0F};
 constexpr ImVec4 kVolumeColour{0.55F, 0.60F, 0.70F, 0.6F};
 constexpr ImVec4 kVolatilityColour{0.82F, 0.45F, 0.95F, 1.0F};
+constexpr ImVec4 kVarBandColour{0.94F, 0.33F, 0.31F, 0.55F};
+constexpr ImVec4 kBreachColour{1.0F, 0.20F, 0.20F, 1.0F};
+constexpr std::array<ImVec4, 4> kForecastColours{
+    ImVec4{0.36F, 0.80F, 0.98F, 1.0F}, ImVec4{0.98F, 0.75F, 0.18F, 1.0F},
+    ImVec4{0.40F, 0.90F, 0.50F, 1.0F}, ImVec4{0.95F, 0.55F, 0.30F, 1.0F}};
+constexpr float kBreachMarkerSize = 4.0F;
 
 ImPlotSpec line_spec(ImVec4 colour) {
     ImPlotSpec spec;
@@ -63,7 +70,53 @@ void draw_tooltip(const ChartSeries& series) {
     ImGui::EndTooltip();
 }
 
-void draw_price_plot(const ChartSeries& series, const ChartSettings& settings, bool fit_to_data) {
+void draw_var_overlay(const ChartOverlay& overlay) {
+    if (overlay.analysis == nullptr || overlay.var_model >= overlay.analysis->models.size()) {
+        return;
+    }
+    const AssetAnalysis& analysis = *overlay.analysis;
+    const ModelAnalysis& model = analysis.models[overlay.var_model];
+    if (model.failure) {
+        return;
+    }
+    const double percent = analysis.settings.confidence * 100.0;
+    const std::string band = std::format("{:g}% VaR ({})", percent, model.name);
+    ImPlotSpec band_spec;
+    band_spec.LineColor = kVarBandColour;
+    band_spec.LineWeight = 1.0F;
+    ImPlot::PlotLine(band.c_str(), analysis.times.data(), model.var_price.data(),
+                     static_cast<int>(analysis.times.size()), band_spec);
+    ImPlotSpec markers;
+    markers.Marker = ImPlotMarker_Down;
+    markers.MarkerSize = kBreachMarkerSize;
+    markers.LineColor = kBreachColour;
+    markers.FillColor = kBreachColour;
+    markers.MarkerFillColor = kBreachColour;
+    markers.MarkerLineColor = kBreachColour;
+    const std::string breaches = std::format("breaches ({})", model.breach_times.size());
+    ImPlot::PlotScatter(breaches.c_str(), model.breach_times.data(), model.breach_prices.data(),
+                        static_cast<int>(model.breach_times.size()), markers);
+}
+
+void draw_forecast_overlay(const ChartOverlay& overlay) {
+    if (overlay.analysis == nullptr) {
+        return;
+    }
+    const AssetAnalysis& analysis = *overlay.analysis;
+    for (std::size_t i = 0; i < analysis.models.size(); ++i) {
+        const ModelAnalysis& model = analysis.models[i];
+        if (model.failure) {
+            continue;
+        }
+        const std::string label = std::format("forecast: {}", model.name);
+        ImPlot::PlotLine(label.c_str(), analysis.times.data(), model.volatility_percent.data(),
+                         static_cast<int>(analysis.times.size()),
+                         line_spec(kForecastColours.at(i % kForecastColours.size())));
+    }
+}
+
+void draw_price_plot(const ChartSeries& series, const ChartSettings& settings, bool fit_to_data,
+                     const ChartOverlay& overlay) {
     if (!ImPlot::BeginPlot("##price")) {
         return;
     }
@@ -81,6 +134,7 @@ void draw_price_plot(const ChartSeries& series, const ChartSettings& settings, b
                      line_spec(kFastAverageColour));
     ImPlot::PlotLine(slow_label.c_str(), series.times.data(), series.slow_average.data(), count,
                      line_spec(kSlowAverageColour));
+    draw_var_overlay(overlay);
     draw_tooltip(series);
     ImPlot::EndPlot();
 }
@@ -104,33 +158,35 @@ void draw_volume_plot(const ChartSeries& series, bool fit_to_data) {
 }
 
 void draw_volatility_plot(const ChartSeries& series, const ChartSettings& settings,
-                          bool fit_to_data) {
+                          bool fit_to_data, const ChartOverlay& overlay) {
     if (!ImPlot::BeginPlot("##volatility")) {
         return;
     }
-    ImPlot::SetupAxes("date", "realised vol %", 0, kValueAxisFlags);
+    ImPlot::SetupAxes("date", "annualised vol %", 0, kValueAxisFlags);
     setup_time_axis(series, fit_to_data);
     ImPlot::SetupLegend(ImPlotLocation_NorthWest);
     const std::string label =
         std::format("{}-day realised volatility (annualised)", settings.volatility_window);
     ImPlot::PlotLine(label.c_str(), series.times.data(), series.volatility_percent.data(),
                      static_cast<int>(series.size()), line_spec(kVolatilityColour));
+    draw_forecast_overlay(overlay);
     draw_tooltip(series);
     ImPlot::EndPlot();
 }
 
 }
 
-void draw_chart(const ChartSeries& series, const ChartSettings& settings, bool fit_to_data) {
+void draw_chart(const ChartSeries& series, const ChartSettings& settings, bool fit_to_data,
+                const ChartOverlay& overlay) {
     std::array<float, 3> row_ratios{0.60F, 0.15F, 0.25F};
     if (!ImPlot::BeginSubplots("##chart", 3, 1, ImVec2{-1.0F, -1.0F},
                                ImPlotSubplotFlags_LinkAllX | ImPlotSubplotFlags_NoTitle,
                                row_ratios.data())) {
         return;
     }
-    draw_price_plot(series, settings, fit_to_data);
+    draw_price_plot(series, settings, fit_to_data, overlay);
     draw_volume_plot(series, fit_to_data);
-    draw_volatility_plot(series, settings, fit_to_data);
+    draw_volatility_plot(series, settings, fit_to_data, overlay);
     ImPlot::EndSubplots();
 }
 

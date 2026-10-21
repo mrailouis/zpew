@@ -9,6 +9,7 @@ add_executable(zpew_app
     src/main.cpp
     src/platform/glfw_window.cpp
     src/platform/imgui_session.cpp
+    src/ui/analysis_panel.cpp
     src/ui/symbol_picker.cpp
     src/ui/terminal_app.cpp)
 
