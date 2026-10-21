@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "zpew volatility analytics terminal",
-  "author": "Louis Beer",
+  "author": "Louis B",
   "license": "Apache-2.0",
   "main": "dist/main/main.js",
   "engines": {
