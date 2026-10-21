@@ -7,6 +7,7 @@
 #include <zpew/io/binary_file.hpp>
 #include <zpew/io/sha256.hpp>
 #include <zpew/models/model_spec.hpp>
+#include <zpew/var/backtest.hpp>
 
 #include <toml++/toml.hpp>
 
@@ -145,6 +146,30 @@ void fill_evaluation(EvalConfig& config, const toml::table& root, const ConfigRe
     }
 }
 
+void fill_backtest(EvalConfig& config, const toml::table& root, const ConfigReader& reader) {
+    const toml::table* backtest = root["backtest"].as_table();
+    if (backtest == nullptr) {
+        config.confidence_levels = {var::kDefaultConfidence};
+        return;
+    }
+    reader.require_keys(*backtest, "[backtest]", {"confidence_levels"});
+    const toml::array* levels = (*backtest)["confidence_levels"].as_array();
+    if (levels == nullptr || levels->empty()) {
+        reader.fail("'confidence_levels' must be a non-empty array of numbers");
+    }
+    for (const toml::node& node : *levels) {
+        const auto level = node.value<double>();
+        const bool valid = level && *level > 0.5 && *level < 1.0;
+        if (!valid) {
+            reader.fail("each confidence level must be a number in (0.5, 1)");
+        }
+        if (std::ranges::find(config.confidence_levels, *level) != config.confidence_levels.end()) {
+            reader.fail(std::format("duplicate confidence level {}", *level));
+        }
+        config.confidence_levels.push_back(*level);
+    }
+}
+
 void fill_models(EvalConfig& config, const toml::table& root, const ConfigReader& reader) {
     const toml::array* models = root["models"].as_array();
     if (models == nullptr || models->empty()) {
@@ -178,9 +203,9 @@ EvalConfig load_eval_config(const std::filesystem::path& path) {
     } catch (const toml::parse_error& error) {
         reader.fail(std::format("invalid TOML: {}", error.description()));
     }
-    reader.require_keys(
-        root, "the top level",
-        {"name", "manifest", "output", "assets", "threads", "baseline", "evaluation", "models"});
+    reader.require_keys(root, "the top level",
+                        {"name", "manifest", "output", "assets", "threads", "baseline",
+                         "evaluation", "backtest", "models"});
 
     const std::filesystem::path base = path.parent_path();
     EvalConfig config;
@@ -195,6 +220,7 @@ EvalConfig load_eval_config(const std::filesystem::path& path) {
     config.baseline = reader.text(root, "baseline");
     fill_evaluation(config, root, reader);
     fill_models(config, root, reader);
+    fill_backtest(config, root, reader);
     return config;
 }
 

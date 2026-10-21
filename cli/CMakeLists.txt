@@ -12,9 +12,11 @@ add_custom_target(zpew_build_info
     VERBATIM)
 
 add_executable(zpew_cli
+    src/backtest_command.cpp
     src/check_data_command.cpp
     src/eval_command.cpp
     src/eval_config.cpp
+    src/evaluation_runner.cpp
     src/fit_command.cpp
     src/forecast_command.cpp
     src/json_text.cpp

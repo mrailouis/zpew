@@ -1,3 +1,4 @@
+#include "backtest_command.hpp"
 #include "check_data_command.hpp"
 #include "eval_command.hpp"
 #include "exit_code.hpp"
@@ -30,7 +31,8 @@ constexpr std::string_view kUsage =
     "       zpew-cli fit --symbol <symbol> --model garch [--targeting on|off]\n"
     "                    [--manifest <path>]\n"
     "       zpew-cli fit --config <file>\n"
-    "       zpew-cli eval --config <file> [--output <directory>]\n";
+    "       zpew-cli eval --config <file> [--output <directory>]\n"
+    "       zpew-cli backtest --config <file> [--output <directory>]\n";
 
 int run(std::span<const std::string_view> args) {
     if (args.size() == 1 && args.front() == "--version") {
@@ -57,6 +59,10 @@ int run(std::span<const std::string_view> args) {
         const zpew::cli::Options options{rest,
                                          {"symbol", "model", "targeting", "manifest", "config"}};
         return zpew::cli::run_fit(options, std::cout, std::cerr);
+    }
+    if (command == "backtest") {
+        const zpew::cli::Options options{rest, {"config", "output"}};
+        return zpew::cli::run_backtest(options, std::cout, std::cerr);
     }
     if (command == "eval") {
         const zpew::cli::Options options{rest, {"config", "output"}};

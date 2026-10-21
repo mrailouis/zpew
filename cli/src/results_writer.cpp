@@ -6,6 +6,8 @@
 #include <zpew/evaluation/improvement.hpp>
 #include <zpew/evaluation/losses.hpp>
 #include <zpew/evaluation/rolling_forecast.hpp>
+#include <zpew/var/backtest.hpp>
+#include <zpew/var/pooled_backtest.hpp>
 
 #include <cstddef>
 #include <filesystem>
@@ -15,6 +17,7 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace zpew::cli {
 
@@ -117,6 +120,59 @@ void write_failures(const std::filesystem::path& file, std::span<const AssetFail
     for (const auto& failure : failures) {
         out << std::format("{},{},{},{}\n", failure.symbol, failure.mode, csv_field(failure.model),
                            csv_field(failure.reason));
+    }
+}
+
+void write_var_series(const std::filesystem::path& directory,
+                      const evaluation::AssetEvaluation& asset,
+                      std::span<const double> confidences) {
+    std::vector<std::vector<double>> columns;
+    std::ofstream out = open_output(directory / std::string{evaluation::to_string(asset.mode)} /
+                                    (asset.symbol + ".csv"));
+    out << "date,return";
+    for (const auto& model : asset.models) {
+        if (model.failure) {
+            continue;
+        }
+        for (const double confidence : confidences) {
+            out << ',' << csv_field(std::format("var{:g}_{}", confidence * 100.0, model.model));
+            columns.push_back(var::value_at_risk_series(model.forecasts, confidence));
+        }
+    }
+    out << '\n';
+    for (std::size_t i = 0; i < asset.dates.size(); ++i) {
+        out << std::format("{},{}", data::format_iso_date(asset.dates[i]), asset.returns[i]);
+        for (const auto& column : columns) {
+            out << std::format(",{}", column[i]);
+        }
+        out << '\n';
+    }
+}
+
+void write_backtests(const std::filesystem::path& file,
+                     std::span<const var::AssetBacktest> backtests) {
+    std::ofstream out = open_output(file);
+    out << "symbol,window_mode,model,confidence,observations,breaches,breach_rate,expected_rate,"
+           "kupiec_lr,kupiec_p_value\n";
+    for (const auto& item : backtests) {
+        const var::BacktestResult& r = item.result;
+        out << std::format("{},{},{},{},{},{},{},{},{},{}\n", item.symbol,
+                           evaluation::to_string(item.mode), csv_field(item.model), r.confidence,
+                           r.observations, r.breaches, r.breach_rate, r.expected_rate,
+                           r.kupiec.likelihood_ratio, r.kupiec.p_value);
+    }
+}
+
+void write_pooled_backtests(const std::filesystem::path& file,
+                            std::span<const var::PooledBacktest> pooled) {
+    std::ofstream out = open_output(file);
+    out << "window_mode,model,confidence,assets,observations,breaches,pooled_breach_rate,"
+           "mean_breach_rate,median_breach_rate,kupiec_rejections_at_5pct\n";
+    for (const auto& row : pooled) {
+        out << std::format("{},{},{},{},{},{},{},{},{},{}\n", evaluation::to_string(row.mode),
+                           csv_field(row.model), row.confidence, row.assets, row.observations,
+                           row.breaches, row.pooled_breach_rate, row.mean_breach_rate,
+                           row.median_breach_rate, row.kupiec_rejections);
     }
 }
 

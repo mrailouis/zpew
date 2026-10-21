@@ -22,6 +22,10 @@ refit_every = 20
 # Sliding is the primary design; expanding is the robustness check.
 window_modes = ["sliding", "expanding"]
 
+[backtest]
+# One-day VaR confidence levels (SPEC.md section 8); 95% is the plan's level.
+confidence_levels = [0.95, 0.99]
+
 [[models]]
 name = "rv21"
 type = "realised"

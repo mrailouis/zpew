@@ -23,6 +23,7 @@ struct EvalConfig {
     std::size_t refit_every{};
     std::vector<evaluation::WindowMode> window_modes;
     std::vector<models::ModelSpec> models;
+    std::vector<double> confidence_levels;
 
     [[nodiscard]] std::filesystem::path run_directory() const { return output / name; }
 };

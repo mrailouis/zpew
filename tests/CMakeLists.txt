@@ -115,16 +115,38 @@ if(ZPEW_BUILD_CLI)
 
     add_test(NAME cli.eval_writes_every_output_file
         COMMAND ${CMAKE_COMMAND} -E cat
-                ${zpew_eval_output}/fixture/run.json
-                ${zpew_eval_output}/fixture/losses.csv
-                ${zpew_eval_output}/fixture/improvements.csv
-                ${zpew_eval_output}/fixture/pooled.csv
-                ${zpew_eval_output}/fixture/failures.csv
-                ${zpew_eval_output}/fixture/forecasts/sliding/SIM.csv
-                ${zpew_eval_output}/fixture/forecasts/expanding/SIM.csv)
+                ${zpew_eval_output}/fixture/eval/run.json
+                ${zpew_eval_output}/fixture/eval/losses.csv
+                ${zpew_eval_output}/fixture/eval/improvements.csv
+                ${zpew_eval_output}/fixture/eval/pooled.csv
+                ${zpew_eval_output}/fixture/eval/failures.csv
+                ${zpew_eval_output}/fixture/eval/forecasts/sliding/SIM.csv
+                ${zpew_eval_output}/fixture/eval/forecasts/expanding/SIM.csv)
     set_tests_properties(cli.eval_writes_every_output_file PROPERTIES
         DEPENDS cli.eval_runs_the_fixture_and_reports_unfittable_models
         PASS_REGULAR_EXPRESSION "\"git_commit\".*SIM,sliding,garch,needs a window of at least 500 returns")
+
+    add_test(NAME cli.backtest_runs_the_fixture
+        COMMAND zpew_cli backtest --config ${zpew_cli_fixtures}/eval/eval.toml --output ${zpew_eval_output})
+    set_tests_properties(cli.backtest_runs_the_fixture PROPERTIES
+        PASS_REGULAR_EXPRESSION "backtested 1 assets x 2 window modes in [0-9.]+ s; 2 failures")
+
+    add_test(NAME cli.backtest_writes_every_output_file
+        COMMAND ${CMAKE_COMMAND} -E cat
+                ${zpew_eval_output}/fixture/backtest/run.json
+                ${zpew_eval_output}/fixture/backtest/backtest.csv
+                ${zpew_eval_output}/fixture/backtest/pooled_backtest.csv
+                ${zpew_eval_output}/fixture/backtest/failures.csv
+                ${zpew_eval_output}/fixture/backtest/var/sliding/SIM.csv
+                ${zpew_eval_output}/fixture/backtest/var/expanding/SIM.csv)
+    set_tests_properties(cli.backtest_writes_every_output_file PROPERTIES
+        DEPENDS cli.backtest_runs_the_fixture
+        PASS_REGULAR_EXPRESSION "\"command\": \"backtest\".*SIM,sliding,rv21,0.95,99,.*date,return,var95_rv21,var95_ewma")
+
+    add_test(NAME cli.eval_and_backtest_keep_separate_outputs
+        COMMAND ${CMAKE_COMMAND} -E cat ${zpew_eval_output}/fixture/eval/losses.csv)
+    set_tests_properties(cli.eval_and_backtest_keep_separate_outputs PROPERTIES
+        DEPENDS cli.backtest_writes_every_output_file)
 
     add_test(NAME cli.eval_rejects_unknown_config_keys
         COMMAND zpew_cli eval --config ${zpew_cli_fixtures}/eval/unknown_key.toml --output ${zpew_eval_output})
