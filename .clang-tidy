@@ -13,12 +13,14 @@ Checks: >
   readability-*,
   -bugprone-easily-swappable-parameters,
   -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-pro-bounds-avoid-unchecked-container-access,
   -cppcoreguidelines-pro-bounds-constant-array-index,
   -misc-non-private-member-variables-in-classes,
   -modernize-use-trailing-return-type,
   -portability-avoid-pragma-once,
   -readability-identifier-length,
-  -readability-magic-numbers
+  -readability-magic-numbers,
+  -readability-trailing-comma
 WarningsAsErrors: '*'
 HeaderFilterRegex: '.*/(core|cli|app|tests)/.*'
 FormatStyle: file

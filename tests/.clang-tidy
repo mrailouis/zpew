@@ -1,0 +1,4 @@
+---
+InheritParentConfig: true
+Checks: '-bugprone-random-generator-seed,-cert-msc32-c,-cert-msc51-cpp'
+...
