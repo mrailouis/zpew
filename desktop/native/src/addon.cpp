@@ -1,5 +1,7 @@
+#include "analysis_data.hpp"
 #include "asset_list.hpp"
 #include "build_info.hpp"
+#include "chart_data.hpp"
 #include "js_error.hpp"
 
 #include <zpew/data/manifest.hpp>
@@ -41,6 +43,8 @@ Napi::Object initialise(Napi::Env env, Napi::Object exports) {
     exports.Set("buildInfo", Napi::Function::New(env, build));
     exports.Set("findManifest", Napi::Function::New(env, find_manifest));
     exports.Set("listAssets", Napi::Function::New(env, list_assets));
+    exports.Set("loadChart", Napi::Function::New(env, load_chart));
+    exports.Set("analyse", Napi::Function::New(env, analyse));
     return exports;
 }
 

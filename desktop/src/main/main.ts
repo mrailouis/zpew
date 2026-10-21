@@ -1,8 +1,13 @@
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 import path from "node:path";
 
-import { IPC_CHANNELS, type AppInfo } from "../shared/api";
-import { loadNativeModule, type NativeModule } from "./native-module";
+import {
+    IPC_CHANNELS,
+    type AnalysisSettings,
+    type AppInfo,
+    type ChartSettings,
+} from "../shared/api";
+import { addonPath, loadNativeModule, type NativeModule } from "./native-module";
 
 const INITIAL_WIDTH = 1600;
 const INITIAL_HEIGHT = 1000;
@@ -22,6 +27,19 @@ function requireManifest(manifestPath: string | null): string {
     return manifestPath;
 }
 
+function requireSymbol(symbol: unknown): string {
+    if (typeof symbol !== "string" || symbol.length === 0) {
+        throw new Error("symbol must be a non-empty string");
+    }
+    return symbol;
+}
+
+function appRoot(): string {
+    return app.isPackaged
+        ? app.getAppPath().replace("app.asar", "app.asar.unpacked")
+        : app.getAppPath();
+}
+
 function registerHandlers(native: NativeModule, manifestPath: string | null): void {
     ipcMain.handle(IPC_CHANNELS.appInfo, (): AppInfo => {
         const build = native.buildInfo();
@@ -33,6 +51,20 @@ function registerHandlers(native: NativeModule, manifestPath: string | null): vo
         };
     });
     ipcMain.handle(IPC_CHANNELS.listAssets, () => native.listAssets(requireManifest(manifestPath)));
+    ipcMain.handle(IPC_CHANNELS.loadChart, (_event, symbol: unknown, settings: unknown) =>
+        native.loadChart(
+            requireManifest(manifestPath),
+            requireSymbol(symbol),
+            settings as ChartSettings,
+        ),
+    );
+    ipcMain.handle(IPC_CHANNELS.analyse, (_event, symbol: unknown, settings: unknown) =>
+        native.analyse(
+            requireManifest(manifestPath),
+            requireSymbol(symbol),
+            settings as AnalysisSettings,
+        ),
+    );
 }
 
 function createWindow(): void {
@@ -57,7 +89,7 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-    const native = loadNativeModule();
+    const native = loadNativeModule(addonPath(appRoot()));
     registerHandlers(native, locateManifest(native));
     createWindow();
     app.on("activate", () => {

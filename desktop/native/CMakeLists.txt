@@ -32,8 +32,13 @@ add_custom_target(zpew_native_build_info
 
 add_library(zpew_native SHARED
     src/addon.cpp
+    src/analysis_data.cpp
+    src/analysis_object.cpp
     src/asset_list.cpp
+    src/chart_data.cpp
     src/js_error.cpp
+    src/request_settings.cpp
+    src/typed_arrays.cpp
     ${zpew_native_build_info})
 add_dependencies(zpew_native zpew_native_build_info)
 set_target_properties(zpew_native PROPERTIES PREFIX "" SUFFIX ".node")
