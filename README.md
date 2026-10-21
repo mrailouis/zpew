@@ -71,7 +71,7 @@ reads the local files and never contacts Tiingo.
    Then edit `.env` so it reads `TIINGO_API_KEY=your-token`. Setting
    `TIINGO_API_KEY` in your environment works too and takes precedence.
 
-3. Fetch the assets listed in `data/universe.csv`. The script needs Python 3.11
+3. Fetch the assets listed in `data/universe.csv`. The script needs Python 3.9
    or newer and nothing outside the standard library.
 
    ```
