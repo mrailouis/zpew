@@ -91,3 +91,6 @@ data/snapshots/
 # Python
 __pycache__/
 .venv/
+
+# Local docs
+/docs/
