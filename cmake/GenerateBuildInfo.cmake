@@ -24,9 +24,13 @@ if(GIT_FOUND)
     endif()
 endif()
 
+if(NOT DEFINED NAMESPACE)
+    set(NAMESPACE "zpew::cli")
+endif()
+
 set(content "#include \"build_info.hpp\"
 
-namespace zpew::cli {
+namespace ${NAMESPACE} {
 
 BuildInfo build_info() noexcept {
     return {.commit = \"${commit}\", .dirty = ${dirty}, .compiler = \"${COMPILER}\"};
