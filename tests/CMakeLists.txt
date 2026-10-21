@@ -22,6 +22,7 @@ add_executable(zpew_tests
     io/binary_file_test.cpp
     io/sha256_test.cpp
     returns/log_returns_test.cpp
+    returns/realised_variance_test.cpp
     returns/rolling_mean_of_squares_test.cpp
     version_test.cpp)
 
