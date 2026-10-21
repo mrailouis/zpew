@@ -1,4 +1,6 @@
 add_library(zpew_core STATIC
+    src/data/iso_date.cpp
+    src/data/snapshot_csv.cpp
     src/io/binary_file.cpp
     src/io/sha256.cpp
     src/version.cpp)

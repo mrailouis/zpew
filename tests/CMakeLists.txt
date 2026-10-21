@@ -11,12 +11,15 @@ zpew_configure_third_party_target(Catch2)
 zpew_configure_third_party_target(Catch2WithMain)
 
 add_executable(zpew_tests
+    data/iso_date_test.cpp
+    data/snapshot_csv_test.cpp
     error_test.cpp
     io/binary_file_test.cpp
     io/sha256_test.cpp
     version_test.cpp)
 
 target_link_libraries(zpew_tests PRIVATE zpew::core Catch2::Catch2WithMain)
+target_include_directories(zpew_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(zpew_tests PRIVATE ZPEW_EXPECTED_VERSION="${PROJECT_VERSION}")
 
 zpew_configure_target(zpew_tests)
