@@ -1,6 +1,6 @@
 #include <zpew/error.hpp>
 #include <zpew/returns/realised_variance.hpp>
-#include <zpew/returns/rolling_mean_of_squares.hpp>
+#include <zpew/returns/rolling_mean.hpp>
 
 #include <cmath>
 #include <cstddef>
@@ -11,13 +11,16 @@
 namespace zpew::returns {
 
 std::vector<double> rolling_realised_variance(std::span<const double> returns, std::size_t window) {
-    RollingMeanOfSquares rolling{window};
+    RollingMean rolling{window};
     std::vector<double> variances;
     if (returns.size() >= window) {
         variances.reserve(returns.size() - window + 1);
     }
     for (const double r : returns) {
-        rolling.push(r);
+        if (!std::isfinite(r)) {
+            throw InvalidArgument{std::format("return {} must be finite", r)};
+        }
+        rolling.push(r * r);
         if (rolling.full()) {
             variances.push_back(rolling.mean());
         }

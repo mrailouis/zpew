@@ -23,7 +23,7 @@ add_executable(zpew_tests
     io/sha256_test.cpp
     returns/log_returns_test.cpp
     returns/realised_variance_test.cpp
-    returns/rolling_mean_of_squares_test.cpp
+    returns/rolling_mean_test.cpp
     version_test.cpp)
 
 target_link_libraries(zpew_tests PRIVATE zpew::core Catch2::Catch2WithMain nlohmann_json::nlohmann_json)

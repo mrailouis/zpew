@@ -5,9 +5,9 @@
 
 namespace zpew::returns {
 
-class RollingMeanOfSquares {
+class RollingMean {
 public:
-    explicit RollingMeanOfSquares(std::size_t window);
+    explicit RollingMean(std::size_t window);
 
     void push(double value);
 
@@ -18,7 +18,7 @@ public:
 private:
     void recompute_sum() noexcept;
 
-    std::vector<double> squares_;
+    std::vector<double> values_;
     std::size_t next_ = 0;
     std::size_t count_ = 0;
     std::size_t updates_since_recompute_ = 0;

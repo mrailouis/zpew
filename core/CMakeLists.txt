@@ -12,7 +12,7 @@ add_library(zpew_core STATIC
     src/io/sha256.cpp
     src/returns/log_returns.cpp
     src/returns/realised_variance.cpp
-    src/returns/rolling_mean_of_squares.cpp
+    src/returns/rolling_mean.cpp
     src/version.cpp)
 add_library(zpew::core ALIAS zpew_core)
 
