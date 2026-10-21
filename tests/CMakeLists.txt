@@ -64,6 +64,21 @@ if(ZPEW_BUILD_CLI)
     set_tests_properties(cli.check_data_reports_tampering PROPERTIES
         PASS_REGULAR_EXPRESSION "FAIL  TEST +.*sha256 mismatch for TEST")
 
+    add_test(NAME cli.forecast_prints_one_step_ahead_ewma
+        COMMAND zpew_cli forecast --symbol TEST --model ewma --lambda 0.5 --seed 1
+                --manifest ${zpew_cli_fixtures}/valid/manifest.json)
+    set_tests_properties(cli.forecast_prints_one_step_ahead_ewma PROPERTIES
+        PASS_REGULAR_EXPRESSION "# symbol=TEST model=EWMA\\(lambda=0.5, seed=1\\)\ndate,return,forecast_variance\n2024-01-11,0\\.00975617494536[0-9]*,9\\.706774520[0-9]*e-05\n$")
+
+    add_test(NAME cli.forecast_rejects_unknown_models
+        COMMAND zpew_cli forecast --symbol TEST --model garch
+                --manifest ${zpew_cli_fixtures}/valid/manifest.json)
+    set_tests_properties(cli.forecast_rejects_unknown_models PROPERTIES WILL_FAIL TRUE)
+
+    add_test(NAME cli.forecast_rejects_unknown_options
+        COMMAND zpew_cli forecast --symbol TEST --model ewma --alpha 0.1)
+    set_tests_properties(cli.forecast_rejects_unknown_options PROPERTIES WILL_FAIL TRUE)
+
     add_test(NAME cli.check_data_fails_on_missing_manifest
         COMMAND zpew_cli check-data --manifest ${zpew_cli_fixtures}/missing/manifest.json)
     set_tests_properties(cli.check_data_fails_on_missing_manifest PROPERTIES WILL_FAIL TRUE)
