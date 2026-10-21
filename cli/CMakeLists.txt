@@ -1,4 +1,5 @@
 add_executable(zpew_cli
+    src/check_data_command.cpp
     src/main.cpp)
 
 set_target_properties(zpew_cli PROPERTIES OUTPUT_NAME zpew-cli)

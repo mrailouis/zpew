@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {
+      "symbol": "TEST",
+      "name": "Hand-made test asset",
+      "asset_class": "test",
+      "calendar": "weekdays",
+      "source": "hand-made",
+      "source_url": "https://example.invalid/test",
+      "terms_url": "https://example.invalid/terms",
+      "fetched_at": "2026-10-21T00:00:00Z",
+      "first_date": "2024-01-04",
+      "last_date": "2024-01-11",
+      "rows": 3,
+      "file": "snapshots/TEST.csv",
+      "sha256": "03d6390d624125f8748d0f54ab08ca4a034ab945b647ae37497ac9a38f856c63"
+    }
+  ]
+}

@@ -41,4 +41,23 @@ if(ZPEW_BUILD_CLI)
     add_test(NAME cli.rejects_unknown_arguments COMMAND zpew_cli --bogus)
     set_tests_properties(cli.rejects_unknown_arguments PROPERTIES WILL_FAIL TRUE)
 
+    set(zpew_cli_fixtures ${CMAKE_CURRENT_SOURCE_DIR}/cli/fixtures)
+
+    add_test(NAME cli.check_data_accepts_valid_snapshots
+        COMMAND zpew_cli check-data --manifest ${zpew_cli_fixtures}/valid/manifest.json)
+    set_tests_properties(cli.check_data_accepts_valid_snapshots PROPERTIES
+        PASS_REGULAR_EXPRESSION "ok    TEST +3 bars  2024-01-04 to 2024-01-11  1 gap, largest 3 sessions after 2024-01-05\n1 of 1 snapshots verified")
+
+    add_test(NAME cli.check_data_rejects_tampered_snapshots
+        COMMAND zpew_cli check-data --manifest ${zpew_cli_fixtures}/tampered/manifest.json)
+    set_tests_properties(cli.check_data_rejects_tampered_snapshots PROPERTIES WILL_FAIL TRUE)
+
+    add_test(NAME cli.check_data_reports_tampering
+        COMMAND zpew_cli check-data --manifest ${zpew_cli_fixtures}/tampered/manifest.json)
+    set_tests_properties(cli.check_data_reports_tampering PROPERTIES
+        PASS_REGULAR_EXPRESSION "FAIL  TEST +.*sha256 mismatch for TEST")
+
+    add_test(NAME cli.check_data_fails_on_missing_manifest
+        COMMAND zpew_cli check-data --manifest ${zpew_cli_fixtures}/missing/manifest.json)
+    set_tests_properties(cli.check_data_fails_on_missing_manifest PROPERTIES WILL_FAIL TRUE)
 endif()
