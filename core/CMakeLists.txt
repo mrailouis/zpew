@@ -10,6 +10,7 @@ add_library(zpew_core STATIC
     src/data/validation.cpp
     src/io/binary_file.cpp
     src/io/sha256.cpp
+    src/returns/log_returns.cpp
     src/version.cpp)
 add_library(zpew::core ALIAS zpew_core)
 

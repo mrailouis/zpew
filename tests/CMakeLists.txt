@@ -21,6 +21,7 @@ add_executable(zpew_tests
     error_test.cpp
     io/binary_file_test.cpp
     io/sha256_test.cpp
+    returns/log_returns_test.cpp
     version_test.cpp)
 
 target_link_libraries(zpew_tests PRIVATE zpew::core Catch2::Catch2WithMain nlohmann_json::nlohmann_json)
