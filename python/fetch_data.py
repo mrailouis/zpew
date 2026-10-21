@@ -36,6 +36,7 @@ REQUESTS_PER_HOUR = 50
 REQUESTS_PER_DAY = 1000
 RATE_LIMIT_RETRY_SECONDS = 15 * 60
 MAX_ATTEMPTS = 4
+CRYPTO_WINDOW_DAYS = 4000
 
 
 class FetchError(Exception):
@@ -263,18 +264,24 @@ def fetch_page(client: TiingoClient, asset: Asset, start: dt.date, end: dt.date)
 
 
 def fetch_bars(client: TiingoClient, asset: Asset, start: dt.date, end: dt.date,
-               fetch: Callable[[dt.date, dt.date], list[Bar]] | None = None) -> list[Bar]:
+               fetch: Callable[[dt.date, dt.date], list[Bar]] | None = None,
+               window_days: int | None = None) -> list[Bar]:
     fetch = fetch or (lambda s, e: fetch_page(client, asset, s, e))
+    if window_days is None and asset is not None and asset.endpoint == "crypto":
+        window_days = CRYPTO_WINDOW_DAYS
     bars: list[Bar] = []
     page_start = start
     while page_start <= end:
-        page = fetch(page_start, end)
-        if not page:
+        page_end = end if window_days is None else min(
+            end, page_start + dt.timedelta(days=window_days - 1))
+        page = fetch(page_start, page_end)
+        if page:
+            bars.extend(page)
+            page_start = page[-1].date + dt.timedelta(days=1)
+        elif window_days is not None:
+            page_start = page_end + dt.timedelta(days=1)
+        else:
             break
-        bars.extend(page)
-        if page[-1].date >= end:
-            break
-        page_start = page[-1].date + dt.timedelta(days=1)
     return bars
 
 

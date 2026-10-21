@@ -142,6 +142,27 @@ class PaginationTest(unittest.TestCase):
         self.assertEqual(calls, [dt.date(2024, 1, 1), dt.date(2024, 1, 3)])
 
 
+class WindowedPaginationTest(unittest.TestCase):
+    def test_skips_empty_windows_before_the_series_begins(self) -> None:
+        calls: list[tuple[dt.date, dt.date]] = []
+        data = {dt.date(2024, 1, d): bar(d) for d in (8, 9, 10, 11)}
+
+        def fetch(start: dt.date, end: dt.date) -> list[Bar]:
+            calls.append((start, end))
+            return [b for day, b in sorted(data.items()) if start <= day <= end]
+
+        bars = fetch_data.fetch_bars(None, None, dt.date(2024, 1, 1), dt.date(2024, 1, 11),
+                                     fetch, window_days=3)
+        self.assertEqual([b.date.day for b in bars], [8, 9, 10, 11])
+        self.assertEqual(calls[0], (dt.date(2024, 1, 1), dt.date(2024, 1, 3)))
+        self.assertEqual(calls[1], (dt.date(2024, 1, 4), dt.date(2024, 1, 6)))
+
+    def test_a_series_that_never_starts_returns_nothing(self) -> None:
+        bars = fetch_data.fetch_bars(None, None, dt.date(2024, 1, 1), dt.date(2024, 1, 20),
+                                     lambda s, e: [], window_days=7)
+        self.assertEqual(bars, [])
+
+
 class RequestPacerTest(unittest.TestCase):
     def test_spaces_requests_to_the_hourly_limit(self) -> None:
         now = [0.0]
