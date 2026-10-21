@@ -1,14 +1,15 @@
 :root {
     color-scheme: dark;
     --background: #0b0d12;
-    --panel: #12151d;
+    --panel: #10131a;
+    --raised: #161a24;
     --border: #232838;
     --text: #d7dbe6;
     --muted: #7d8497;
     --accent: #5b8cff;
     --danger: #ef5350;
     font-family: "SF Mono", Menlo, Consolas, monospace;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 * {
@@ -27,22 +28,176 @@ body {
     color: var(--text);
 }
 
+button,
+input,
+select {
+    font: inherit;
+    color: inherit;
+}
+
 .app {
     display: grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 300px 1fr;
     height: 100%;
 }
 
 .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    padding: 12px;
     background: var(--panel);
     border-right: 1px solid var(--border);
     overflow-y: auto;
-    padding: 12px;
+}
+
+.brand {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+h2 {
+    margin: 10px 0 2px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.field {
+    display: grid;
+    gap: 3px;
+}
+
+.field input,
+.field select,
+.filter {
+    width: 100%;
+    padding: 5px 7px;
+    background: var(--raised);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+.field input:focus,
+.field select:focus,
+.filter:focus {
+    outline: 1px solid var(--accent);
+}
+
+.check {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.symbols {
+    min-height: 200px;
+}
+
+.asset-class {
+    margin: 8px 0 2px;
+    color: var(--muted);
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.asset {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 6px;
+    width: 100%;
+    padding: 3px 6px;
+    background: none;
+    border: none;
+    border-radius: 3px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.asset:hover {
+    background: var(--raised);
+}
+
+.asset.selected {
+    background: #1d2a4a;
 }
 
 .main {
-    padding: 12px;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 10px 12px 12px;
+}
+
+.header {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    margin-bottom: 6px;
+}
+
+.symbol {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.tabs button {
+    padding: 4px 10px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.tabs button.active {
+    color: var(--text);
+    border-color: var(--accent);
+}
+
+.chart-canvas {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    outline: none;
+    cursor: crosshair;
+}
+
+.comparison {
+    overflow: auto;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 8px 0;
+}
+
+th,
+td {
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    text-align: right;
+    white-space: nowrap;
+}
+
+th:first-child,
+td:first-child {
+    text-align: left;
+}
+
+th {
+    color: var(--muted);
+    font-weight: 400;
 }
 
 .muted {
@@ -52,11 +207,4 @@ body {
 .error {
     color: var(--danger);
     white-space: pre-wrap;
-}
-
-.asset {
-    display: grid;
-    grid-template-columns: 72px 1fr;
-    gap: 8px;
-    padding: 2px 0;
 }
