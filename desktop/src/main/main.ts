@@ -7,12 +7,17 @@ import {
     type AppInfo,
     type ChartSettings,
 } from "../shared/api";
+import { manifestFromArguments } from "./manifest-location";
 import { addonPath, loadNativeModule, type NativeModule } from "./native-module";
 
 const INITIAL_WIDTH = 1600;
 const INITIAL_HEIGHT = 1000;
 
 function locateManifest(native: NativeModule): string | null {
+    const explicit = manifestFromArguments(process.argv) ?? process.env.ZPEW_MANIFEST ?? null;
+    if (explicit !== null && explicit.length > 0) {
+        return path.resolve(explicit);
+    }
     return (
         native.findManifest(process.cwd()) ?? native.findManifest(path.dirname(app.getPath("exe")))
     );

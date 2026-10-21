@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "zpew volatility analytics terminal",
+  "author": "Louis Beer",
   "license": "Apache-2.0",
   "main": "dist/main/main.js",
   "engines": {
@@ -13,15 +14,17 @@
     "build:addon": "cmake-js build --directory native --out build/native --config Release",
     "build:main": "tsc -p tsconfig.main.json",
     "build:renderer": "vite build",
-    "build": "npm run build:addon && npm run build:main && npm run build:preload && npm run build:renderer",
+    "build": "npm run build:addon && npm run build:app",
     "start": "npm run build && electron .",
     "test": "vitest run",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc -p tsconfig.main.json --noEmit && tsc -p tsconfig.preload.json --noEmit && tsc -p tsconfig.renderer.json --noEmit",
-    "package": "npm run build && electron-builder",
-    "build:preload": "vite build --config vite.preload.config.mts"
+    "package": "npm run build && electron-builder --publish never",
+    "build:preload": "vite build --config vite.preload.config.mts",
+    "build:app": "npm run build:main && npm run build:preload && npm run build:renderer",
+    "package:dir": "npm run build && electron-builder --dir --publish never"
   },
   "dependencies": {
     "react": "19.3.0",
@@ -48,8 +51,10 @@
   "build": {
     "appId": "net.zpew.app",
     "productName": "zpew",
+    "npmRebuild": false,
     "directories": {
-      "output": "release"
+      "output": "release",
+      "buildResources": "resources"
     },
     "files": [
       "dist/**/*",
@@ -60,16 +65,22 @@
       "build/native/Release/zpew_native.node"
     ],
     "mac": {
-      "icon": "../app/resources/zpew.icns",
       "target": [
         "dmg"
-      ]
+      ],
+      "category": "public.app-category.finance",
+      "icon": "resources/icon.icns",
+      "identity": null
     },
     "win": {
-      "icon": "../app/resources/zpew.ico",
       "target": [
         "nsis"
-      ]
+      ],
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "cmake-js": {
