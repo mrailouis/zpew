@@ -42,6 +42,7 @@
 build/
 Build/
 build-*/
+cmake-build-*/
 
 # CMake generated files
 CMakeFiles/
@@ -50,6 +51,7 @@ cmake_install.cmake
 Makefile
 install_manifest.txt
 compile_commands.json
+CMakeUserPresets.json
 
 # Temporary files
 *.tmp
@@ -66,3 +68,26 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# AI agent instructions
+AGENTS.md
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
+# IDEs
+.idea/
+.vscode/
+.vs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project outputs
+results/
+data/snapshots/
+
+# Python
+__pycache__/
+.venv/
