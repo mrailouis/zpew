@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, nativeTheme, shell } from "electron";
 import path from "node:path";
 
 import {
@@ -6,12 +6,17 @@ import {
     type AnalysisSettings,
     type AppInfo,
     type ChartSettings,
+    type Platform,
 } from "../shared/api";
 import { manifestFromArguments } from "./manifest-location";
 import { addonPath, loadNativeModule, type NativeModule } from "./native-module";
+import { parseWindowAppearance, TITLE_BAR_HEIGHT, windowOptions } from "./window-options";
 
-const INITIAL_WIDTH = 1600;
-const INITIAL_HEIGHT = 1000;
+function currentPlatform(): Platform {
+    return process.platform === "darwin" || process.platform === "win32"
+        ? process.platform
+        : "linux";
+}
 
 function locateManifest(native: NativeModule): string | null {
     const explicit = manifestFromArguments(process.argv) ?? process.env.ZPEW_MANIFEST ?? null;
@@ -26,7 +31,7 @@ function locateManifest(native: NativeModule): string | null {
 function requireManifest(manifestPath: string | null): string {
     if (manifestPath === null) {
         throw new Error(
-            "No data/manifest.json found. Fetch data as described in README.md before starting zpew.",
+            "No data/manifest.json found. Fetch data as described in README.md, or start zpew with --manifest <path>.",
         );
     }
     return manifestPath;
@@ -53,6 +58,7 @@ function registerHandlers(native: NativeModule, manifestPath: string | null): vo
             commit: build.commit,
             dirty: build.dirty,
             manifestPath,
+            platform: currentPlatform(),
         };
     });
     ipcMain.handle(IPC_CHANNELS.listAssets, () => native.listAssets(requireManifest(manifestPath)));
@@ -70,21 +76,34 @@ function registerHandlers(native: NativeModule, manifestPath: string | null): vo
             settings as AnalysisSettings,
         ),
     );
+    ipcMain.handle(IPC_CHANNELS.setWindowAppearance, (event, value: unknown) => {
+        const appearance = parseWindowAppearance(value);
+        nativeTheme.themeSource = appearance.themeSource;
+        const window = BrowserWindow.fromWebContents(event.sender);
+        if (window === null) {
+            return;
+        }
+        window.setBackgroundColor(appearance.titleBarColour);
+        if (currentPlatform() !== "darwin") {
+            window.setTitleBarOverlay({
+                color: appearance.titleBarColour,
+                symbolColor: appearance.titleBarSymbolColour,
+                height: TITLE_BAR_HEIGHT,
+            });
+        }
+    });
 }
 
 function createWindow(): void {
-    const window = new BrowserWindow({
-        width: INITIAL_WIDTH,
-        height: INITIAL_HEIGHT,
-        title: "zpew",
-        backgroundColor: "#0b0d12",
-        webPreferences: {
-            preload: path.join(__dirname, "..", "preload", "preload.js"),
-            contextIsolation: true,
-            sandbox: true,
-            nodeIntegration: false,
-            webSecurity: true,
-        },
+    const window = new BrowserWindow(
+        windowOptions(
+            currentPlatform(),
+            path.join(__dirname, "..", "preload", "preload.js"),
+            nativeTheme.shouldUseDarkColors,
+        ),
+    );
+    window.once("ready-to-show", () => {
+        window.show();
     });
     window.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
     window.webContents.on("will-navigate", (event) => {

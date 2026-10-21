@@ -17,6 +17,8 @@ const api: ZpewApi = {
         ipcRenderer.invoke(IPC_CHANNELS.loadChart, symbol, settings) as Promise<ChartData>,
     analyse: (symbol, settings) =>
         ipcRenderer.invoke(IPC_CHANNELS.analyse, symbol, settings) as Promise<AnalysisData>,
+    setWindowAppearance: (appearance) =>
+        ipcRenderer.invoke(IPC_CHANNELS.setWindowAppearance, appearance) as Promise<void>,
 };
 
 contextBridge.exposeInMainWorld("zpew", api);

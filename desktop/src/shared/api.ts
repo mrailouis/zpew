@@ -1,8 +1,19 @@
+export type Platform = "darwin" | "win32" | "linux";
+
+export type ThemeSource = "system" | "dark" | "light";
+
 export interface AppInfo {
     readonly version: string;
     readonly commit: string;
     readonly dirty: boolean;
     readonly manifestPath: string | null;
+    readonly platform: Platform;
+}
+
+export interface WindowAppearance {
+    readonly themeSource: ThemeSource;
+    readonly titleBarColour: string;
+    readonly titleBarSymbolColour: string;
 }
 
 export interface AssetSummary {
@@ -114,6 +125,7 @@ export interface ZpewApi {
     listAssets(): Promise<readonly AssetSummary[]>;
     loadChart(symbol: string, settings: ChartSettings): Promise<ChartData>;
     analyse(symbol: string, settings: AnalysisSettings): Promise<AnalysisData>;
+    setWindowAppearance(appearance: WindowAppearance): Promise<void>;
 }
 
 export const IPC_CHANNELS = {
@@ -121,6 +133,7 @@ export const IPC_CHANNELS = {
     listAssets: "zpew:list-assets",
     loadChart: "zpew:load-chart",
     analyse: "zpew:analyse",
+    setWindowAppearance: "zpew:set-window-appearance",
 } as const;
 
 export const DEFAULT_CHART_SETTINGS: ChartSettings = {
