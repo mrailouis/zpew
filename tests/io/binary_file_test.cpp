@@ -1,44 +1,14 @@
+#include "support/temporary_directory.hpp"
+
 #include <zpew/error.hpp>
 #include <zpew/io/binary_file.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <filesystem>
-#include <fstream>
-#include <ios>
 #include <string>
-#include <system_error>
 
-namespace {
-
-class TemporaryDirectory {
-public:
-    explicit TemporaryDirectory(const std::string& name)
-        : path_{std::filesystem::temp_directory_path() / name} {
-        std::filesystem::remove_all(path_);
-        std::filesystem::create_directories(path_);
-    }
-    ~TemporaryDirectory() {
-        std::error_code ignored;
-        std::filesystem::remove_all(path_, ignored);
-    }
-    TemporaryDirectory(const TemporaryDirectory&) = delete;
-    TemporaryDirectory& operator=(const TemporaryDirectory&) = delete;
-    TemporaryDirectory(TemporaryDirectory&&) = delete;
-    TemporaryDirectory& operator=(TemporaryDirectory&&) = delete;
-
-    [[nodiscard]] const std::filesystem::path& path() const noexcept { return path_; }
-
-private:
-    std::filesystem::path path_;
-};
-
-void write_bytes(const std::filesystem::path& path, const std::string& bytes) {
-    std::ofstream stream{path, std::ios::binary};
-    stream.write(bytes.data(), static_cast<std::streamsize>(bytes.size()));
-}
-
-}
+using zpew::test::TemporaryDirectory;
+using zpew::test::write_bytes;
 
 TEST_CASE("read_binary_file returns the exact bytes, including CR and NUL", "[io]") {
     const TemporaryDirectory directory{"zpew_binary_file_test_exact"};
