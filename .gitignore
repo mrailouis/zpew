@@ -97,3 +97,4 @@ __pycache__/
 
 # Secrets
 .env
+data/synthetic/
