@@ -46,6 +46,34 @@ jobs:
       - uses: actions/checkout@v5
       - run: python3 -m unittest discover -s python -v
 
+  desktop:
+    name: desktop-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: desktop/.nvmrc
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+      - run: npm ci
+      - run: npm run build:addon
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build:app
+      - run: npx electron-builder --dir --publish never
+
   clang-tidy:
     runs-on: macos-latest
     steps:
