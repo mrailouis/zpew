@@ -1,0 +1,79 @@
+{
+  "name": "zpew-desktop",
+  "productName": "zpew",
+  "version": "0.1.0",
+  "private": true,
+  "description": "zpew volatility analytics terminal",
+  "license": "Apache-2.0",
+  "main": "dist/main/main.js",
+  "engines": {
+    "node": ">=24.18.0 <25"
+  },
+  "scripts": {
+    "build:addon": "cmake-js build --directory native --out build/native --config Release",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:renderer": "vite build",
+    "build": "npm run build:addon && npm run build:main && npm run build:preload && npm run build:renderer",
+    "start": "npm run build && electron .",
+    "test": "vitest run",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc -p tsconfig.main.json --noEmit && tsc -p tsconfig.preload.json --noEmit && tsc -p tsconfig.renderer.json --noEmit",
+    "package": "npm run build && electron-builder",
+    "build:preload": "vite build --config vite.preload.config.mts"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.19.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "cmake-js": "8.0.0",
+    "electron": "44.6.0",
+    "electron-builder": "26.15.3",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "node-addon-api": "8.9.2",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
+    "vite": "8.3.3",
+    "vitest": "5.0.3"
+  },
+  "build": {
+    "appId": "net.zpew.app",
+    "productName": "zpew",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "build/native/Release/zpew_native.node",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "build/native/Release/zpew_native.node"
+    ],
+    "mac": {
+      "icon": "../app/resources/zpew.icns",
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "icon": "../app/resources/zpew.ico",
+      "target": [
+        "nsis"
+      ]
+    }
+  },
+  "cmake-js": {
+    "runtime": "electron",
+    "runtimeVersion": "44.6.0"
+  }
+}
