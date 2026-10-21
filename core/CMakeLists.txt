@@ -11,6 +11,7 @@ add_library(zpew_core STATIC
     src/io/binary_file.cpp
     src/io/sha256.cpp
     src/returns/log_returns.cpp
+    src/returns/moving_average.cpp
     src/returns/realised_variance.cpp
     src/returns/rolling_mean.cpp
     src/version.cpp)
