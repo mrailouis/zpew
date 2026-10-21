@@ -5,6 +5,7 @@ add_library(zpew_core STATIC
     src/data/iso_date.cpp
     src/data/manifest.cpp
     src/data/snapshot_csv.cpp
+    src/data/snapshot_data_source.cpp
     src/data/trading_calendar.cpp
     src/data/validation.cpp
     src/io/binary_file.cpp

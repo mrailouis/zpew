@@ -15,6 +15,7 @@ add_executable(zpew_tests
     data/iso_date_test.cpp
     data/manifest_test.cpp
     data/snapshot_csv_test.cpp
+    data/snapshot_data_source_test.cpp
     data/trading_calendar_test.cpp
     data/validation_test.cpp
     error_test.cpp
