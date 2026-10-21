@@ -16,6 +16,7 @@ Checks: >
   -cppcoreguidelines-pro-bounds-constant-array-index,
   -misc-non-private-member-variables-in-classes,
   -modernize-use-trailing-return-type,
+  -portability-avoid-pragma-once,
   -readability-identifier-length,
   -readability-magic-numbers
 WarningsAsErrors: '*'
