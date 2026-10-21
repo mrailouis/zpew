@@ -114,11 +114,6 @@ void GarchModel::fit(std::span<const double> returns) {
         throw ConvergenceError{
             std::format("GARCH fit did not converge from any of {} starts", starts)};
     }
-    if (best->params.persistence() > kGarchMaxPersistence) {
-        throw ConvergenceError{
-            std::format("GARCH fit is at the integrated boundary: alpha + beta = {}",
-                        best->params.persistence())};
-    }
 
     double variance = best->params.omega + (best->params.persistence() * backcast);
     for (const double r : returns) {
@@ -130,7 +125,8 @@ void GarchModel::fit(std::span<const double> returns) {
                     .observations = returns.size(),
                     .starts = starts,
                     .converged_starts = converged_starts,
-                    .iterations = iterations};
+                    .iterations = iterations,
+                    .at_boundary = best->params.persistence() > kGarchBoundaryPersistence};
     variance_ = variance;
 }
 
@@ -153,6 +149,10 @@ void GarchModel::update(double new_return) {
 
 std::string GarchModel::name() const {
     return options_.variance_targeting ? "GARCH(1,1, variance targeting)" : "GARCH(1,1)";
+}
+
+bool GarchModel::fit_at_boundary() const noexcept {
+    return fit_ && fit_->at_boundary;
 }
 
 const GarchFit& GarchModel::fitted() const {

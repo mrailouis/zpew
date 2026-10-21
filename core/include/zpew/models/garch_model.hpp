@@ -11,7 +11,7 @@
 namespace zpew::models {
 
 inline constexpr std::size_t kGarchMinimumFitLength = 500;
-inline constexpr double kGarchMaxPersistence = 1.0 - 1e-6;
+inline constexpr double kGarchBoundaryPersistence = 1.0 - 1e-6;
 
 struct GarchOptions {
     bool variance_targeting = false;
@@ -26,6 +26,7 @@ struct GarchFit {
     int starts{};
     int converged_starts{};
     int iterations{};
+    bool at_boundary{};
 };
 
 class GarchModel final : public VolModel {
@@ -36,6 +37,7 @@ public:
     [[nodiscard]] double forecast_variance() const override;
     void update(double new_return) override;
     [[nodiscard]] std::string name() const override;
+    [[nodiscard]] bool fit_at_boundary() const noexcept override;
 
     [[nodiscard]] const GarchFit& fitted() const;
 

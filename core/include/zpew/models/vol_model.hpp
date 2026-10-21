@@ -13,6 +13,7 @@ public:
     [[nodiscard]] virtual double forecast_variance() const = 0;
     virtual void update(double new_return) = 0;
     [[nodiscard]] virtual std::string name() const = 0;
+    [[nodiscard]] virtual bool fit_at_boundary() const noexcept { return false; }
 
 protected:
     VolModel() = default;
