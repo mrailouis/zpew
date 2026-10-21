@@ -113,11 +113,20 @@ export function CoverageGrid({
                         </span>
                     ))}
                 </div>
-                <span />
             </div>
             {years.map((year) => (
                 <div key={year.year} className="coverage-row">
-                    <span className="coverage-year">{year.year}</span>
+                    <div className="coverage-year">
+                        <span>{year.year}</span>
+                        <span className="coverage-summary">
+                            <span>{year.bars.toLocaleString("en-GB")} bars</span>
+                            {year.missing > 0 && (
+                                <span className="down">
+                                    {year.missing.toLocaleString("en-GB")} missing
+                                </span>
+                            )}
+                        </span>
+                    </div>
                     <div className="coverage-body">
                         <div className="coverage-weekdays">
                             {WEEKDAYS.slice(0, year.rows).map((label, row) => (
@@ -126,14 +135,6 @@ export function CoverageGrid({
                         </div>
                         <YearCanvas year={year} colours={colours} />
                     </div>
-                    <span className="coverage-summary">
-                        <span>{year.bars.toLocaleString("en-GB")} bars</span>
-                        {year.missing > 0 && (
-                            <span className="down">
-                                {year.missing.toLocaleString("en-GB")} missing
-                            </span>
-                        )}
-                    </span>
                 </div>
             ))}
         </div>

@@ -1116,13 +1116,15 @@ h3 {
 
 .coverage-row {
     display: grid;
-    grid-template-columns: 44px max-content 1fr;
+    grid-template-columns: 84px max-content;
     align-items: start;
     gap: 12px;
 }
 
 .coverage-year {
-    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     font-size: 12px;
     font-variant-numeric: tabular-nums;
     line-height: 14px;
@@ -1174,11 +1176,9 @@ h3 {
 .coverage-summary {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    color: var(--muted);
-    font-size: 12px;
-    font-variant-numeric: tabular-nums;
-    line-height: 14px;
+    gap: 2px;
+    color: var(--faint);
+    font-size: 11px;
     white-space: nowrap;
 }
 
