@@ -9,6 +9,10 @@ target_compile_options(zpew_options INTERFACE
     $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-Wall -Wextra -Wpedantic -Werror>
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX /permissive- /utf-8 /Zc:__cplusplus>)
 
+target_compile_definitions(zpew_options INTERFACE
+    $<$<CONFIG:Debug>:_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG>
+    $<$<CONFIG:Debug>:_GLIBCXX_ASSERTIONS>)
+
 add_library(zpew_sanitizers INTERFACE)
 add_library(zpew::sanitizers ALIAS zpew_sanitizers)
 target_link_libraries(zpew_options INTERFACE zpew::sanitizers)
