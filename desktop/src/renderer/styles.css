@@ -318,7 +318,8 @@ h3 {
 
 .list-symbol {
     flex: none;
-    width: 64px;
+    min-width: 64px;
+    white-space: nowrap;
 }
 
 .list-name {
