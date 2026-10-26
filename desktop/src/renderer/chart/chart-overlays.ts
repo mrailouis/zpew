@@ -1,4 +1,5 @@
 import type { ChartTheme } from "../appearance/chart-theme";
+import { readableTextOn } from "../appearance/colour";
 import { formatCompact, formatPercent, formatPrice } from "./chart-format";
 import type { LineRole, OverlayLine } from "./chart-model";
 import { PANE_NAMES, paneAt, plotArea, type ChartLayout, type PaneName, type Rect } from "./layout";
@@ -90,7 +91,7 @@ export function drawLastPrice(
         rect.left + rect.width + 4,
         y,
         colour,
-        theme.labelText,
+        readableTextOn(colour),
         theme,
         "left",
     );

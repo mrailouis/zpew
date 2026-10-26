@@ -1,5 +1,8 @@
 const ACCENT_SATURATION = 0.82;
 const ACCENT_LIGHTNESS = 0.55;
+const LIGHT_BACKGROUND_LUMINANCE = 0.5;
+const LIGHT_TEXT = "#ffffff";
+const DARK_TEXT = "#0d0d0d";
 
 export function normaliseHue(hue: number): number {
     return ((Math.round(hue) % 360) + 360) % 360;
@@ -33,4 +36,22 @@ export function hslToHex(hue: number, saturation: number, lightness: number): st
 
 export function accentColour(hue: number): string {
     return hslToHex(hue, ACCENT_SATURATION, ACCENT_LIGHTNESS);
+}
+
+function linearChannel(hex: string): number {
+    const value = Number.parseInt(hex, 16) / 255;
+    return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+}
+
+export function relativeLuminance(hex: string): number {
+    const value = hex.replace("#", "");
+    return (
+        0.2126 * linearChannel(value.slice(0, 2)) +
+        0.7152 * linearChannel(value.slice(2, 4)) +
+        0.0722 * linearChannel(value.slice(4, 6))
+    );
+}
+
+export function readableTextOn(background: string): string {
+    return relativeLuminance(background) > LIGHT_BACKGROUND_LUMINANCE ? DARK_TEXT : LIGHT_TEXT;
 }
