@@ -16,7 +16,7 @@
 
 <img src=".github/assets/screenshot-chart.png" alt="The zpew desktop app showing a candlestick chart with moving averages, a VaR band, volume and three volatility forecasts" width="100%">
 
-<sub>All screenshots use simulated data from <code>python/simulate_data.py</code>, not market prices.</sub>
+<sub>Screenshots show ETH/USDT daily data from <a href="https://data.binance.vision">Binance Vision</a>, licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.</sub>
 
 </div>
 
