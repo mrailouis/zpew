@@ -4,7 +4,7 @@ import { sourceNote } from "./source-note";
 
 describe("sourceNote", () => {
     it("describes known sources", () => {
-        expect(sourceNote("tiingo")).toContain("Tiingo");
+        expect(sourceNote("binance_vision")).toContain("Binance Vision");
         expect(sourceNote("simulated")).toContain("not market data");
     });
 
