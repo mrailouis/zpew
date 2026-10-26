@@ -132,36 +132,28 @@ Returns follow a GARCH(1,1) process with fat-tailed shocks, so volatility cluste
 
 ### Market data
 
-zpew is designed to run on fixed local snapshots of daily prices from [Tiingo](https://www.tiingo.com). No snapshots are in this repository.
+zpew runs on fixed local snapshots of daily USDT spot klines from [Binance Vision](https://data.binance.vision), Binance's public archive of historical market data. No snapshots are in this repository, because the terms do not allow hosting the raw data.
 
-> [!IMPORTANT]
-> Tiingo's terms of use, updated on 6 October 2026, do not allow storing Tiingo data or anything derived from it on the free Starter plan. Keeping snapshots on disk needs a paid plan, and the data must be deleted when that plan ends. Read the [terms](https://app.tiingo.com/tos) before fetching.
+The study is crypto only. No source of daily equity, ETF, bond, commodity or currency prices could be found whose terms allow publishing results derived from it in a free, public project, so those asset classes are left out rather than shown with data that cannot be shared.
 
-With a suitable Tiingo plan:
-
-1. Copy your API token from the [token page](https://www.tiingo.com/account/api/token) into a `.env` file in the repository root, which Git ignores:
+1. Fetch the snapshots. The script only needs Python 3.9 or newer and no API key:
 
    ```
-   $ cp .env.example .env
+   $ python3 python/fetch_binance.py --end 2026-09-30
    ```
 
-   Edit it so it reads `TIINGO_API_KEY=your-token`. Setting the variable in your environment also works.
+   It lists every USDT spot pair Binance Vision has ever published, including delisted ones, and keeps pairs with at least 2,000 consecutive daily bars up to `--end`. Stablecoins, other pegged tokens and leveraged tokens are excluded. If a pair's history has a gap, only the bars after the last gap are kept, so returns never span missing days or a reused ticker. Every monthly archive is checked against Binance's published SHA-256 before use and cached under `data/snapshots/`. The decision for every candidate pair, included or excluded with the reason, is written to `data/universe.csv`.
 
-2. Fetch the assets listed in `data/universe.csv`. The script only needs Python 3.9 or newer.
-
-   ```
-   $ python3 python/fetch_data.py --end 2026-09-30
-   ```
-
-   `--end` fixes the last date, so the same command always asks for the same range. The script respects the rate limit, can be stopped and restarted, and skips snapshots that are already complete. Use `--only SPY,QQQ` to fetch a subset.
-
-3. Check that every snapshot loads and matches the manifest:
+2. Check that every snapshot loads and matches the manifest:
 
    ```
    $ ./build/macos-release/cli/zpew-cli check-data
    ```
 
-`data/manifest.json` records the source, date range, row count and SHA-256 hash of every snapshot. Tiingo revises adjusted prices after dividends and splits, so a later fetch can differ from the committed manifest; `check-data` then reports a hash mismatch.
+`data/manifest.json` records the source, date range, row count and SHA-256 hash of every snapshot.
+
+> [!IMPORTANT]
+> Binance Vision data is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) by the [Binance Vision Dataset Terms](https://data.binance.vision/Binance_Vision-Terms_of_Use.pdf). Use it only for non-commercial purposes. Results, figures and screenshots derived from it are credited to Binance Vision and shared under the same licence. zpew is not affiliated with or endorsed by Binance.
 
 ## Running the evaluation
 
