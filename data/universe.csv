@@ -1,106 +1,156 @@
-symbol,tiingo_ticker,endpoint,asset_class,calendar,name,start_date
-SPY,spy,daily,us_equity_broad,weekdays,SPDR S&P 500 ETF Trust,
-QQQ,qqq,daily,us_equity_broad,weekdays,Invesco QQQ Trust,
-DIA,dia,daily,us_equity_broad,weekdays,SPDR Dow Jones Industrial Average ETF Trust,
-IWM,iwm,daily,us_equity_broad,weekdays,iShares Russell 2000 ETF,
-MDY,mdy,daily,us_equity_broad,weekdays,SPDR S&P MidCap 400 ETF Trust,
-VTI,vti,daily,us_equity_broad,weekdays,Vanguard Total Stock Market ETF,
-RSP,rsp,daily,us_equity_broad,weekdays,Invesco S&P 500 Equal Weight ETF,
-IWD,iwd,daily,us_equity_style,weekdays,iShares Russell 1000 Value ETF,
-IWF,iwf,daily,us_equity_style,weekdays,iShares Russell 1000 Growth ETF,
-USMV,usmv,daily,us_equity_style,weekdays,iShares MSCI USA Min Vol Factor ETF,
-MTUM,mtum,daily,us_equity_style,weekdays,iShares MSCI USA Momentum Factor ETF,
-XLB,xlb,daily,us_equity_sector,weekdays,Materials Select Sector SPDR Fund,
-XLE,xle,daily,us_equity_sector,weekdays,Energy Select Sector SPDR Fund,
-XLF,xlf,daily,us_equity_sector,weekdays,Financial Select Sector SPDR Fund,
-XLI,xli,daily,us_equity_sector,weekdays,Industrial Select Sector SPDR Fund,
-XLK,xlk,daily,us_equity_sector,weekdays,Technology Select Sector SPDR Fund,
-XLP,xlp,daily,us_equity_sector,weekdays,Consumer Staples Select Sector SPDR Fund,
-XLU,xlu,daily,us_equity_sector,weekdays,Utilities Select Sector SPDR Fund,
-XLV,xlv,daily,us_equity_sector,weekdays,Health Care Select Sector SPDR Fund,
-XLY,xly,daily,us_equity_sector,weekdays,Consumer Discretionary Select Sector SPDR Fund,
-XLRE,xlre,daily,us_equity_sector,weekdays,Real Estate Select Sector SPDR Fund,
-XLC,xlc,daily,us_equity_sector,weekdays,Communication Services Select Sector SPDR Fund,
-SMH,smh,daily,us_equity_industry,weekdays,VanEck Semiconductor ETF,
-XBI,xbi,daily,us_equity_industry,weekdays,SPDR S&P Biotech ETF,
-IBB,ibb,daily,us_equity_industry,weekdays,iShares Biotechnology ETF,
-KRE,kre,daily,us_equity_industry,weekdays,SPDR S&P Regional Banking ETF,
-KBE,kbe,daily,us_equity_industry,weekdays,SPDR S&P Bank ETF,
-XHB,xhb,daily,us_equity_industry,weekdays,SPDR S&P Homebuilders ETF,
-ITB,itb,daily,us_equity_industry,weekdays,iShares U.S. Home Construction ETF,
-XRT,xrt,daily,us_equity_industry,weekdays,SPDR S&P Retail ETF,
-XME,xme,daily,us_equity_industry,weekdays,SPDR S&P Metals & Mining ETF,
-GDX,gdx,daily,us_equity_industry,weekdays,VanEck Gold Miners ETF,
-OIH,oih,daily,us_equity_industry,weekdays,VanEck Oil Services ETF,
-VNQ,vnq,daily,us_equity_industry,weekdays,Vanguard Real Estate ETF,
-AAPL,aapl,daily,us_equity_single,weekdays,Apple Inc.,
-MSFT,msft,daily,us_equity_single,weekdays,Microsoft Corporation,
-AMZN,amzn,daily,us_equity_single,weekdays,Amazon.com Inc.,
-NVDA,nvda,daily,us_equity_single,weekdays,NVIDIA Corporation,
-JPM,jpm,daily,us_equity_single,weekdays,JPMorgan Chase & Co.,
-XOM,xom,daily,us_equity_single,weekdays,Exxon Mobil Corporation,
-JNJ,jnj,daily,us_equity_single,weekdays,Johnson & Johnson,
-PG,pg,daily,us_equity_single,weekdays,Procter & Gamble Company,
-KO,ko,daily,us_equity_single,weekdays,Coca-Cola Company,
-TSLA,tsla,daily,us_equity_single,weekdays,Tesla Inc.,
-EFA,efa,daily,intl_developed,weekdays,iShares MSCI EAFE ETF,
-VEA,vea,daily,intl_developed,weekdays,Vanguard FTSE Developed Markets ETF,
-EWJ,ewj,daily,intl_developed,weekdays,iShares MSCI Japan ETF,
-EWG,ewg,daily,intl_developed,weekdays,iShares MSCI Germany ETF,
-EWU,ewu,daily,intl_developed,weekdays,iShares MSCI United Kingdom ETF,
-EWC,ewc,daily,intl_developed,weekdays,iShares MSCI Canada ETF,
-EWA,ewa,daily,intl_developed,weekdays,iShares MSCI Australia ETF,
-EWQ,ewq,daily,intl_developed,weekdays,iShares MSCI France ETF,
-EWL,ewl,daily,intl_developed,weekdays,iShares MSCI Switzerland ETF,
-EWH,ewh,daily,intl_developed,weekdays,iShares MSCI Hong Kong ETF,
-EWS,ews,daily,intl_developed,weekdays,iShares MSCI Singapore ETF,
-EEM,eem,daily,emerging,weekdays,iShares MSCI Emerging Markets ETF,
-VWO,vwo,daily,emerging,weekdays,Vanguard FTSE Emerging Markets ETF,
-FXI,fxi,daily,emerging,weekdays,iShares China Large-Cap ETF,
-EWZ,ewz,daily,emerging,weekdays,iShares MSCI Brazil ETF,
-EWT,ewt,daily,emerging,weekdays,iShares MSCI Taiwan ETF,
-EWY,ewy,daily,emerging,weekdays,iShares MSCI South Korea ETF,
-INDA,inda,daily,emerging,weekdays,iShares MSCI India ETF,
-EWW,eww,daily,emerging,weekdays,iShares MSCI Mexico ETF,
-EZA,eza,daily,emerging,weekdays,iShares MSCI South Africa ETF,
-TUR,tur,daily,emerging,weekdays,iShares MSCI Turkey ETF,
-EIDO,eido,daily,emerging,weekdays,iShares MSCI Indonesia ETF,
-BIL,bil,daily,rates,weekdays,SPDR Bloomberg 1-3 Month T-Bill ETF,
-SHY,shy,daily,rates,weekdays,iShares 1-3 Year Treasury Bond ETF,
-IEI,iei,daily,rates,weekdays,iShares 3-7 Year Treasury Bond ETF,
-IEF,ief,daily,rates,weekdays,iShares 7-10 Year Treasury Bond ETF,
-TLH,tlh,daily,rates,weekdays,iShares 10-20 Year Treasury Bond ETF,
-TLT,tlt,daily,rates,weekdays,iShares 20+ Year Treasury Bond ETF,
-TIP,tip,daily,rates,weekdays,iShares TIPS Bond ETF,
-GOVT,govt,daily,rates,weekdays,iShares U.S. Treasury Bond ETF,
-AGG,agg,daily,credit,weekdays,iShares Core U.S. Aggregate Bond ETF,
-BND,bnd,daily,credit,weekdays,Vanguard Total Bond Market ETF,
-LQD,lqd,daily,credit,weekdays,iShares iBoxx $ Investment Grade Corporate Bond ETF,
-HYG,hyg,daily,credit,weekdays,iShares iBoxx $ High Yield Corporate Bond ETF,
-JNK,jnk,daily,credit,weekdays,SPDR Bloomberg High Yield Bond ETF,
-EMB,emb,daily,credit,weekdays,iShares J.P. Morgan USD Emerging Markets Bond ETF,
-MUB,mub,daily,credit,weekdays,iShares National Muni Bond ETF,
-MBB,mbb,daily,credit,weekdays,iShares MBS ETF,
-GLD,gld,daily,commodity,weekdays,SPDR Gold Shares,
-SLV,slv,daily,commodity,weekdays,iShares Silver Trust,
-PPLT,pplt,daily,commodity,weekdays,abrdn Platinum ETF Trust,
-PALL,pall,daily,commodity,weekdays,abrdn Palladium ETF Trust,
-USO,uso,daily,commodity,weekdays,United States Oil Fund,
-UNG,ung,daily,commodity,weekdays,United States Natural Gas Fund,
-UGA,uga,daily,commodity,weekdays,United States Gasoline Fund,
-DBC,dbc,daily,commodity,weekdays,Invesco DB Commodity Index Tracking Fund,
-DBA,dba,daily,commodity,weekdays,Invesco DB Agriculture Fund,
-DBB,dbb,daily,commodity,weekdays,Invesco DB Base Metals Fund,
-CPER,cper,daily,commodity,weekdays,United States Copper Index Fund,
-UUP,uup,daily,currency,weekdays,Invesco DB US Dollar Index Bullish Fund,
-FXE,fxe,daily,currency,weekdays,Invesco CurrencyShares Euro Trust,
-FXY,fxy,daily,currency,weekdays,Invesco CurrencyShares Japanese Yen Trust,
-FXB,fxb,daily,currency,weekdays,Invesco CurrencyShares British Pound Sterling Trust,
-FXF,fxf,daily,currency,weekdays,Invesco CurrencyShares Swiss Franc Trust,
-FXA,fxa,daily,currency,weekdays,Invesco CurrencyShares Australian Dollar Trust,
-FXC,fxc,daily,currency,weekdays,Invesco CurrencyShares Canadian Dollar Trust,
-BTCUSD,btcusd,crypto,crypto,daily,Bitcoin / US Dollar,
-ETHUSD,ethusd,crypto,crypto,daily,Ether / US Dollar,2015-08-09
-LTCUSD,ltcusd,crypto,crypto,daily,Litecoin / US Dollar,
-XRPUSD,xrpusd,crypto,crypto,daily,XRP / US Dollar,
-DOGEUSD,dogeusd,crypto,crypto,daily,Dogecoin / US Dollar,
+symbol,status,reason,first_date,last_date,rows
+BTCUSDT,included,,2017-08-17,2026-09-30,3332
+ETHUSDT,included,,2017-08-17,2026-09-30,3332
+BNBUSDT,included,,2017-11-06,2026-09-30,3251
+NEOUSDT,included,,2017-11-20,2026-09-30,3237
+LTCUSDT,included,,2017-12-13,2026-09-30,3214
+QTUMUSDT,included,,2018-03-19,2026-09-30,3118
+ADAUSDT,included,,2018-04-17,2026-09-30,3089
+XRPUSDT,included,,2018-05-04,2026-09-30,3072
+EOSUSDT,included,,2018-05-28,2025-05-26,2556
+IOTAUSDT,included,,2018-05-31,2026-09-30,3045
+XLMUSDT,included,,2018-05-31,2026-09-30,3045
+ONTUSDT,included,,2018-06-08,2026-09-30,3037
+TRXUSDT,included,,2018-06-11,2026-09-30,3034
+ETCUSDT,included,,2018-06-12,2026-09-30,3033
+ICXUSDT,included,,2018-06-13,2026-09-03,3005
+NULSUSDT,included,,2018-07-23,2025-04-16,2460
+VETUSDT,included,,2018-07-25,2026-09-30,2990
+LINKUSDT,included,,2019-01-16,2026-09-30,2815
+ONGUSDT,included,,2019-02-16,2026-09-30,2784
+HOTUSDT,included,,2019-02-18,2026-09-30,2782
+ZILUSDT,included,,2019-02-19,2026-09-30,2781
+FETUSDT,included,,2019-02-28,2026-09-30,2772
+ZRXUSDT,included,,2019-02-28,2026-09-30,2772
+BATUSDT,included,,2019-03-04,2026-09-30,2768
+ZECUSDT,included,,2019-03-21,2026-09-30,2751
+IOSTUSDT,included,,2019-03-22,2026-09-30,2750
+CELRUSDT,included,,2019-03-25,2026-09-30,2747
+DASHUSDT,included,,2019-03-28,2026-09-30,2744
+THETAUSDT,included,,2019-04-10,2026-09-30,2731
+ENJUSDT,included,,2019-04-18,2026-09-30,2723
+ATOMUSDT,included,,2019-04-29,2026-09-30,2712
+TFUELUSDT,included,,2019-05-24,2026-09-30,2687
+ONEUSDT,included,,2019-06-01,2026-09-30,2679
+FTMUSDT,included,,2019-06-11,2025-01-13,2044
+ALGOUSDT,included,,2019-06-22,2026-09-30,2658
+DOGEUSDT,included,,2019-07-05,2026-09-30,2645
+DUSKUSDT,included,,2019-07-22,2026-09-30,2628
+ANKRUSDT,included,,2019-07-23,2026-09-30,2627
+WINUSDT,included,,2019-08-01,2026-09-30,2618
+COSUSDT,included,,2019-08-03,2026-06-19,2513
+MTLUSDT,included,,2019-08-23,2026-09-30,2596
+DENTUSDT,included,,2019-08-27,2026-04-28,2437
+FUNUSDT,included,,2019-08-27,2026-04-23,2432
+WANUSDT,included,,2019-08-27,2026-04-23,2432
+CHZUSDT,included,,2019-09-06,2026-09-30,2582
+BANDUSDT,included,,2019-09-18,2026-09-30,2570
+XTZUSDT,included,,2019-09-24,2026-09-30,2564
+RVNUSDT,included,,2019-09-25,2026-09-30,2563
+HBARUSDT,included,,2019-09-29,2026-09-30,2559
+NKNUSDT,included,,2019-10-11,2026-02-13,2318
+KAVAUSDT,included,,2019-10-25,2026-09-30,2533
+STXUSDT,included,,2019-10-25,2026-09-30,2533
+ARPAUSDT,included,,2019-11-06,2026-09-30,2521
+IOTXUSDT,included,,2019-11-14,2026-09-30,2513
+RLCUSDT,included,,2019-11-14,2026-09-30,2513
+BCHUSDT,included,,2019-11-28,2026-09-30,2499
+OGNUSDT,included,,2020-01-09,2026-09-30,2457
+BNTUSDT,included,,2020-02-06,2026-09-30,2429
+LSKUSDT,included,,2020-02-06,2026-09-30,2429
+MBLUSDT,included,,2020-02-21,2026-09-30,2414
+COTIUSDT,included,,2020-02-26,2026-09-30,2409
+DATAUSDT,included,,2020-04-07,2026-02-13,2139
+CTSIUSDT,included,,2020-04-23,2026-09-30,2352
+HIVEUSDT,included,,2020-04-27,2026-09-30,2348
+CHRUSDT,included,,2020-05-07,2026-09-30,2338
+ARDRUSDT,included,,2020-05-15,2026-07-10,2248
+MDTUSDT,included,,2020-06-05,2026-04-23,2149
+KNCUSDT,included,,2020-06-12,2026-09-30,2302
+LRCUSDT,included,,2020-06-12,2026-04-01,2120
+COMPUSDT,included,,2020-06-25,2026-09-30,2289
+SCUSDT,included,,2020-07-06,2026-09-30,2278
+ZENUSDT,included,,2020-07-06,2026-09-30,2278
+SNXUSDT,included,,2020-07-09,2026-09-30,2275
+VTHOUSDT,included,,2020-07-17,2026-09-30,2267
+DGBUSDT,included,,2020-07-20,2026-09-30,2264
+SXPUSDT,included,,2020-07-20,2026-04-01,2082
+DCRUSDT,included,,2020-07-30,2026-09-30,2254
+STORJUSDT,included,,2020-07-30,2026-09-03,2227
+MANAUSDT,included,,2020-08-06,2026-09-30,2247
+YFIUSDT,included,,2020-08-10,2026-09-30,2243
+JSTUSDT,included,,2020-08-11,2026-09-30,2242
+SOLUSDT,included,,2020-08-11,2026-09-30,2242
+SANDUSDT,included,,2020-08-14,2026-09-30,2239
+CRVUSDT,included,,2020-08-15,2026-09-30,2238
+DOTUSDT,included,,2020-08-18,2026-09-30,2235
+NMRUSDT,included,,2020-08-19,2026-09-30,2234
+RSRUSDT,included,,2020-08-27,2026-09-30,2226
+TRBUSDT,included,,2020-08-29,2026-09-30,2224
+SUSHIUSDT,included,,2020-09-01,2026-09-30,2221
+EGLDUSDT,included,,2020-09-03,2026-09-30,2219
+DIAUSDT,included,,2020-09-04,2026-09-30,2218
+FIOUSDT,included,,2020-09-04,2026-04-23,2058
+KSMUSDT,included,,2020-09-04,2026-09-30,2218
+RUNEUSDT,included,,2020-09-04,2026-09-30,2218
+UMAUSDT,included,1 identical duplicate rows removed,2020-09-09,2026-09-30,2213
+BELUSDT,included,,2020-09-15,2026-09-30,2207
+UNIUSDT,included,,2020-09-17,2026-09-30,2205
+OXTUSDT,included,,2020-09-21,2026-04-23,2041
+AVAXUSDT,included,,2020-09-22,2026-09-30,2200
+UTKUSDT,included,,2020-10-02,2026-04-14,2021
+XVSUSDT,included,,2020-10-06,2026-09-30,2186
+NEARUSDT,included,,2020-10-14,2026-09-30,2178
+AAVEUSDT,included,,2020-10-15,2026-09-30,2177
+FILUSDT,included,,2020-10-15,2026-09-30,2177
+INJUSDT,included,,2020-10-21,2026-09-30,2171
+AUDIOUSDT,included,,2020-10-23,2026-09-30,2169
+CTKUSDT,included,,2020-10-27,2026-09-30,2165
+AXSUSDT,included,1 identical duplicate rows removed,2020-11-04,2026-09-30,2157
+ROSEUSDT,included,,2020-11-19,2026-09-30,2142
+AVAUSDT,included,,2020-11-24,2026-09-30,2137
+SKLUSDT,included,,2020-12-01,2026-09-30,2130
+GRTUSDT,included,,2020-12-17,2026-09-30,2114
+JUVUSDT,included,,2020-12-21,2026-09-30,2110
+PSGUSDT,included,,2020-12-21,2026-09-30,2110
+1INCHUSDT,included,,2020-12-25,2026-09-30,2106
+ASRUSDT,included,,2020-12-30,2026-09-30,2101
+ATMUSDT,included,,2020-12-30,2026-09-30,2101
+OGUSDT,included,,2020-12-30,2026-09-30,2101
+CELOUSDT,included,,2021-01-05,2026-09-30,2095
+RIFUSDT,included,,2021-01-07,2026-09-30,2093
+CKBUSDT,included,,2021-01-26,2026-09-30,2074
+TWTUSDT,included,,2021-01-27,2026-09-30,2073
+SFPUSDT,included,,2021-02-08,2026-09-30,2061
+CAKEUSDT,included,,2021-02-19,2026-09-30,2050
+DODOUSDT,included,,2021-02-19,2026-09-30,2050
+ACMUSDT,included,,2021-02-24,2026-09-30,2045
+ALICEUSDT,included,,2021-03-15,2026-09-30,2026
+SUPERUSDT,included,,2021-03-25,2026-09-30,2016
+CFXUSDT,included,,2021-03-29,2026-09-30,2012
+TKOUSDT,included,,2021-04-07,2026-09-30,2003
+PUNDIXUSDT,included,,2021-04-09,2026-09-30,2001
+WAVESUSDT,excluded,1978 contiguous bars,2019-01-18,2024-06-17,1978
+MATICUSDT,excluded,1965 contiguous bars,2019-04-26,2024-09-10,1965
+CTXCUSDT,excluded,1973 contiguous bars,2019-11-22,2025-04-16,1973
+TROYUSDT,excluded,1960 contiguous bars,2019-12-05,2025-04-16,1960
+LTOUSDT,excluded,1975 contiguous bars,2020-02-07,2025-07-04,1975
+PONDUSDT,excluded,1950 contiguous bars,2021-03-09,2026-07-10,1950
+TLMUSDT,excluded,1997 contiguous bars,2021-04-13,2026-09-30,1997
+BARUSDT,excluded,1989 contiguous bars,2021-04-21,2026-09-30,1989
+SLPUSDT,excluded,1980 contiguous bars,2021-04-30,2026-09-30,1980
+SHIBUSDT,excluded,1970 contiguous bars,2021-05-10,2026-09-30,1970
+ICPUSDT,excluded,1969 contiguous bars,2021-05-11,2026-09-30,1969
+ARUSDT,excluded,1966 contiguous bars,2021-05-14,2026-09-30,1966
+MASKUSDT,excluded,1955 contiguous bars,2021-05-25,2026-09-30,1955
+LPTUSDT,excluded,1952 contiguous bars,2021-05-28,2026-09-30,1952
+SUNUSDT,excluded,1931 contiguous bars after a gap dropped 267 earlier bars,2021-06-18,2026-09-30,1931
+LUNAUSDT,excluded,1584 contiguous bars after a gap dropped 631 earlier bars,2022-05-31,2026-09-30,1584
+KEYUSDT,excluded,642 contiguous bars after a gap dropped 1264 earlier bars,2023-03-10,2024-12-10,642
+CVCUSDT,excluded,1238 contiguous bars after a gap dropped 1201 earlier bars,2023-05-12,2026-09-30,1238
+FTTUSDT,excluded,1105 contiguous bars after a gap dropped 1062 earlier bars,2023-09-22,2026-09-30,1105
+STRAXUSDT,excluded,917 contiguous bars after a gap dropped 1219 earlier bars,2024-03-28,2026-09-30,917
+EURUSDT,excluded,pegged token,,,
+PAXGUSDT,excluded,pegged token,,,
+TUSDUSDT,excluded,pegged token,,,
+USDCUSDT,excluded,pegged token,,,
