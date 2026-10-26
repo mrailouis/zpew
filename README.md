@@ -30,7 +30,16 @@ It forecasts volatility, not prices, and it does not trade.
 - **A command-line tool** that runs the full evaluation from fixed data snapshots and writes every result with the commit, compiler, config hash and data hashes that produced it.
 - **A desktop app** with its own Canvas chart engine, live forecast overlays and side-by-side model comparison.
 
-**Results have not been published yet.** They will appear here and on [zpew.net](https://zpew.net) once the official runs are made from a clean commit.
+## Results
+
+Official run at commit `95b3ae9` (clean tree, `configs/default.toml`) on 131 USDT pairs from Binance Vision, 17 August 2017 to 30 September 2026, with a 1,000-return sliding window refitted every 20 days:
+
+- GARCH(1,1) beats the 21-day realised volatility baseline on QLIKE for 129 of 131 pairs against squared returns (mean improvement 8.9%) and 130 of 131 against the Parkinson range (28.0%). EWMA beats it by 5.7% and 11.8%.
+- Under MSE the differences are at most 3% in either direction.
+- Normal-distribution VaR is breached on more than 1% of days at 99% for every model, from 1.19% to 2.60%. At 95%, EWMA is breached on 5.04% of days and GARCH on 3.81%.
+- EWMA matches an independent Python implementation exactly on all 131 pairs. GARCH(1,1) fits agree with `arch` on 127; on the other 4, zpew finds a higher likelihood.
+
+Full tables, the expanding-window robustness check and the limitations are on [zpew.net/results](https://zpew.net/results). Results are derived from Binance Vision data and shared under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 ## How it works
 
